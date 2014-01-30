@@ -5,7 +5,7 @@ Package.describe({
 Package.on_use(function (api, where) {
   api.add_files('publish-counts.js', ['client', 'server']);
   api.export('Counts', 'client');
-  api.export('publishCount', ['client', 'server']);
+  api.export('publishCount', 'server');
 });
 
 Package.on_test(function (api) {
