@@ -35,8 +35,7 @@ if (Meteor.isServer) {
   // We've forked Meteor in order to run this test.
   // `factsByPackage` has been exported from the Facts package.
   // To run this test, add:
-  // {
-  //   "meteor": {
+  // "meteor": {
   //   "git": "git://github.com/percolatestudio/meteor.git",
   //   "branch": "enable-publication-tests-0.7.0.1"
   // },
