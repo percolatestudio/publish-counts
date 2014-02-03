@@ -2,6 +2,14 @@ Posts = new Meteor.Collection('posts');
 
 if (Meteor.isServer) {
 
+  var PubMock = function() {};
+  PubMock.prototype.added = function(name, id) {};
+  PubMock.prototype.removed = function(name, id) {};
+  PubMock.prototype.changed = function(name, id) {};
+  PubMock.prototype.onStop = function(cb) { this._onStop = cb; };
+  PubMock.prototype.stop = function() { if (this._onStop) this._onStop(); };
+  PubMock.prototype.ready = function() { return true; };
+
   Posts.allow({
     insert: function() {
       return true;
@@ -22,6 +30,26 @@ if (Meteor.isServer) {
       Posts.insert({ testId: testId, name: "i'm a test post" });
     }
   });
+
+  // 
+  // We've forked Meteor in order to run this test.
+  // `factsByPackage` has been exported from the Facts package.
+  // To run this test, add:
+  // {
+  //   "meteor": {
+  //   "git": "git://github.com/percolatestudio/meteor.git",
+  //   "branch": "enable-publication-tests-0.7.0.1"
+  // },
+  // to the project smart.json
+  // 
+
+  // Tinytest.add("Confirm observe handles start and stop", function(test) {
+  //   var pub = new PubMock();
+  //   publishCount(pub, 'posts' + test.id, Posts.find({ testId: test.id }));
+  //   test.equal(factsByPackage['mongo-livedata']['observe-handles'], 1);
+  //   pub.stop();
+  //   test.equal(factsByPackage['mongo-livedata']['observe-handles'], 0);
+  // });
 
 }
 

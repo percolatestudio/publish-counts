@@ -9,6 +9,6 @@ Package.on_use(function (api, where) {
 });
 
 Package.on_test(function (api) {
-  api.use(['publish-counts', 'tinytest']);
+  api.use(['publish-counts', 'tinytest', 'facts']);
   api.add_files('publish-counts_tests.js', ['client', 'server']);
 });
