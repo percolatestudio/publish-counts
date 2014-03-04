@@ -2,13 +2,13 @@ Posts = new Meteor.Collection('posts');
 
 if (Meteor.isServer) {
 
-  var PubMock = function() {};
+  var PubMock = function() { this._ready = false; };
   PubMock.prototype.added = function(name, id) {};
   PubMock.prototype.removed = function(name, id) {};
   PubMock.prototype.changed = function(name, id) {};
   PubMock.prototype.onStop = function(cb) { this._onStop = cb; };
   PubMock.prototype.stop = function() { if (this._onStop) this._onStop(); };
-  PubMock.prototype.ready = function() { return true; };
+  PubMock.prototype.ready = function() { this._ready = true; };
 
   Posts.allow({
     insert: function() {
@@ -50,6 +50,15 @@ if (Meteor.isServer) {
   //   test.equal(factsByPackage['mongo-livedata']['observe-handles'], 0);
   // });
 
+  Tinytest.add("Adding noReady option stops ready being called", function(test) {
+    var pub = new PubMock();
+    publishCount(pub, 'posts' + test.id, Posts.find({ testId: test.id }));
+    test.isTrue(pub._ready);
+    
+    var pub = new PubMock();
+    publishCount(pub, 'posts' + test.id, Posts.find({ testId: test.id }), {noReady: true});
+    test.isFalse(pub._ready);
+  })
 }
 
 if (Meteor.isClient) {

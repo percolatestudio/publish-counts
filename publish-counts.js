@@ -1,7 +1,8 @@
 if (Meteor.isServer) {
-  publishCount = function(self, name, cursor) {
+  publishCount = function(self, name, cursor, options) {
     var count = 0;
     var initializing = true;
+    options = options || {}
 
     var handle = cursor.observeChanges({
       added: function(id) {
@@ -17,7 +18,7 @@ if (Meteor.isServer) {
 
     initializing = false;
     self.added('counts', name, { count: count });
-    self.ready();
+    if (! options.noReady) self.ready();
 
     self.onStop(function() {
       handle.stop();
