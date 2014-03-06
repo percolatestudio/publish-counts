@@ -4,7 +4,7 @@ A package to help you publish the count of a cursor, in real time.
 
 ## Installation
 
-Intercom can be installed with [Meteorite](https://github.com/oortcloud/meteorite/). From inside a Meteorite-managed app:
+publish-counts can be installed with [Meteorite](https://github.com/oortcloud/meteorite/). From inside a Meteorite-managed app:
 
 ``` sh
 $ mrt add publish-counts
@@ -41,4 +41,4 @@ The package includes a test that checks the number of observer handles opened an
 
 MIT. (c) Percolate Studio
 
-Meteor Intercom was developed as part of the [Verso](http://versoapp.com) project.
+publish-counts was developed as part of the [Verso](http://versoapp.com) project.
