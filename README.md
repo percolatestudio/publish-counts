@@ -33,8 +33,6 @@ Meteor.publish('posts-with-count', function() {
 });
 ```
 
-It will be `.ready()` on the client side when the ten posts are loaded (but the counter may not yet be set). If you want more control, use two publications.
-
 ## Notes
 
 The package includes a test that checks the number of observer handles opened and closed (to check for memory leaks). You need to run the `enable-publication-tests-0.7.0.1` branch of `percolatestudio/meteor` to run it however.
