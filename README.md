@@ -15,12 +15,12 @@ $ mrt add publish-counts
 Simply call `publishCount` within a publication, passing in a name and a cursor:
 
 ```
-Meteor.publish('something', function() {
+Meteor.publish('publication', function() {
   publishCount(this, 'name-of-counter', Posts.find());
 });
 ```
 
-On the client side, you can call `Counts.get('name-of-couter')` to get the value of the counter, reactively.
+On the client side, once you've subscribed to `'publication'`, you can call `Counts.get('name-of-couter')` to get the value of the counter, reactively.
 
 ### Readiness
 
