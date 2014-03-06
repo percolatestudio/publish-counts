@@ -1,5 +1,5 @@
 Package.describe({
-  summary: "publish a count"
+  summary: "Publish the count of a cursor, in real time"
 });
 
 Package.on_use(function (api, where) {
