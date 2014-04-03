@@ -20,7 +20,7 @@ Meteor.publish('publication', function() {
 });
 ```
 
-On the client side, once you've subscribed to `'publication'`, you can call `Counts.get('name-of-couter')` to get the value of the counter, reactively.
+On the client side, once you've subscribed to `'publication'`, you can call `Counts.get('name-of-counter')` to get the value of the counter, reactively.
 
 ### Readiness
 
