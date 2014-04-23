@@ -3,6 +3,6 @@
   "description": "Publish the count of a cursor, in real time",
   "homepage": "https://github.com/percolatestudio/publish-counts",
   "author": "Dave Burles (https://github.com/dburles), Tom Coleman (https://github.com/tmeasday)",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "git": "https://github.com/percolatestudio/publish-counts.git"
 }

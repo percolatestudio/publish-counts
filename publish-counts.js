@@ -2,19 +2,42 @@ if (Meteor.isServer) {
   publishCount = function(self, name, cursor, options) {
     var count = 0;
     var initializing = true;
-    options = options || {}
+    options = options || {};
+    if (options.countFromFieldLength)
+      var prev = {};
 
-    var handle = cursor.observeChanges({
-      added: function(id) {
-        count += 1;
+    var observers = {
+      added: function(id, fields) {
+        if (options.countFromFieldLength) {
+          count += fields[options.countFromFieldLength].length;
+          prev[id] = count;
+        } else {
+          count += 1;
+        }
+        
         if (! initializing)
           self.changed('counts', name, { count: count });
       },
-      removed: function(id) {
-        count -= 1;
+      removed: function(id, fields) {
+        count -= options.countFromFieldLength ? fields[options.countFromFieldLength].length : 1;
         self.changed('counts', name, { count: count });
       }
-    });
+    };
+
+    if (options.countFromFieldLength) {
+      observers.changed = function(id, fields) {
+        if (! fields[options.countFromFieldLength])
+          return;
+
+        next = fields[options.countFromFieldLength].length;
+        count += next - prev[id];
+        prev[id] = next;
+        
+        self.changed('counts', name, { count: count });
+      };
+    }
+
+    var handle = cursor.observeChanges(observers);
 
     initializing = false;
     self.added('counts', name, { count: count });

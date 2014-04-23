@@ -92,4 +92,6 @@ if (Meteor.isClient) {
     });
   });
 
+  // TODO: Write tests for options.countFromFieldLength
+  
 }
