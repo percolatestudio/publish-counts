@@ -12,7 +12,7 @@ $ mrt add publish-counts
 
 ## Performance
 
-It's highly recommend that you limit the fields returned to just `_id`. As highlighted in the examples below.
+It's highly recommend that you limit the fields returned to just `_id`. As shown in the examples below.
 
 ## API
 
