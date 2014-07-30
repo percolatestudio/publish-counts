@@ -58,7 +58,7 @@ if (Meteor.isClient) {
   Counts = new Meteor.Collection('counts');
 
   Counts.get = function(name) {
-    var count = Counts.findOne(name);
+    var count = this.findOne(name);
     return count && count.count;
   };
   
