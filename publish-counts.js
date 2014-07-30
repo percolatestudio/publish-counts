@@ -62,7 +62,7 @@ if (Meteor.isClient) {
     return count && count.count;
   };
   
-  UI.registerHelper('getCount', function(name) {
+  UI.registerHelper('getPublishedCount', function(name) {
     return Counts.get(name);
   });
 }
