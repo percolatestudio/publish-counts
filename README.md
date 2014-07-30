@@ -10,17 +10,13 @@ publish-counts can be installed with [Meteorite](https://github.com/oortcloud/me
 $ mrt add publish-counts
 ```
 
-## Performance
-
-It's highly recommend that you limit the fields returned to just `_id`. As shown in the examples below.
-
 ## API
 
 Simply call `publishCount` within a publication, passing in a name and a cursor:
 
 ```
 Meteor.publish('publication', function() {
-  publishCount(this, 'name-of-counter', Posts.find({}, { fields: { _id: true }}));
+  publishCount(this, 'name-of-counter', Posts.find());
 });
 ```
 
@@ -32,7 +28,7 @@ If you publish a count within a publication that also returns cursor(s), you pro
 
 ```
 Meteor.publish('posts-with-count', function() {
-  publishCount(this, 'posts-count', Posts.find({}, { fields: { _id: true }}), { noReady: true });
+  publishCount(this, 'posts-count', Posts.find(), { noReady: true });
   return Posts.find({}, { limit: 10 });
 });
 ```
