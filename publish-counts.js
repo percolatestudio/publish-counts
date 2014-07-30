@@ -63,6 +63,6 @@ if (Meteor.isClient) {
   };
   
   UI.registerHelper('getCount', function(name) {
-    return Counts.get('name');
+    return Counts.get(name);
   });
 }
