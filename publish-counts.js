@@ -6,6 +6,11 @@ if (Meteor.isServer) {
     if (options.countFromFieldLength)
       var prev = {};
 
+    // ensure the cursor doesn't fetch more than it has to
+    cursor._cursorDescription.options.fields = {_id: true};
+    if (options.countFromFieldLength)
+      cursor._cursorDescription.options.fields[options.countFromFieldLength] = true;
+    
     var observers = {
       added: function(id, fields) {
         if (options.countFromFieldLength) {
