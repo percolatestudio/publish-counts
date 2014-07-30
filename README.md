@@ -14,7 +14,7 @@ $ mrt add publish-counts
 
 Simply call `publishCount` within a publication, passing in a name and a cursor:
 
-```
+```js
 Meteor.publish('publication', function() {
   publishCount(this, 'name-of-counter', Posts.find());
 });
@@ -22,14 +22,27 @@ Meteor.publish('publication', function() {
 
 On the client side, once you've subscribed to `'publication'`, you can call `Counts.get('name-of-counter')` to get the value of the counter, reactively.
 
+## Options
+
 ### Readiness
 
 If you publish a count within a publication that also returns cursor(s), you probably want to pass `{noReady: true}` as a final argument to ensure that the "data" publication sets the ready state. For example, the following publication sends down 10 posts, but allows us to see how many there are in total:
 
-```
+```js
 Meteor.publish('posts-with-count', function() {
   publishCount(this, 'posts-count', Posts.find(), { noReady: true });
   return Posts.find({}, { limit: 10 });
+});
+```
+
+### countFromFieldLength
+
+`countFromFieldLength` allows you to specify a field to calculate the sum of its length across all documents.
+For example if we were to store the userIds in an array on a field called `likes`, we could publish them like so:
+
+```js
+Meteor.publish('posts-likes-count', function() {
+  publishCount(this, 'posts-likes-count', Posts.find(), { countFromFieldLength: 'likes' });
 });
 ```
 
