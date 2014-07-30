@@ -38,13 +38,22 @@ Meteor.publish('posts-with-count', function() {
 ### countFromFieldLength
 
 `countFromFieldLength` allows you to specify a field to calculate the sum of its length across all documents.
-For example if we were to store the userIds in an array on a field called `likes`, we could publish them like so:
+For example if we were to store the userIds in an array on a field called `likes`:
+
+```json
+{ content: 'testing', likes: ['6PNw4GQKMA8CLprZf', 'HKv4S7xQ52h6KsXQ7'] },
+{ content: 'a comment', likes: ['PSmYXrxpwg276aPf5'] }
+```
+
+We could then publish them like:
 
 ```js
 Meteor.publish('posts-likes-count', function() {
   publishCount(this, 'posts-likes-count', Posts.find(), { countFromFieldLength: 'likes' });
 });
 ```
+
+And calling `Counts.get('posts-likes-count')` returns `3`
 
 ## Notes
 
