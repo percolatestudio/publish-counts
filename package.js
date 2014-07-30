@@ -3,6 +3,7 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
+  api.use('ui');
   api.add_files('publish-counts.js', ['client', 'server']);
   api.export('Counts', 'client');
   api.export('publishCount', 'server');

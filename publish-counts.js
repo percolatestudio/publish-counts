@@ -56,4 +56,8 @@ if (Meteor.isClient) {
     var count = Counts.findOne(name);
     return count && count.count;
   };
+  
+  UI.registerHelper('getCount', function(name) {
+    return Counts.get('name');
+  });
 }
