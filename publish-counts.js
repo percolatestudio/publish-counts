@@ -51,7 +51,7 @@ if (Meteor.isServer) {
     if (! options.noReady)
       self.ready();
 
-    if (! options.nonreactive)
+    if (! options.nonReactive)
       var handle = cursor.observeChanges(observers);
 
     initializing = false;
