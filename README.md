@@ -30,11 +30,15 @@ If you publish a count within a publication that also returns cursor(s), you pro
 
 ```js
 Meteor.publish('posts-with-count', function() {
-  publishCount(this, 'posts-count', Posts.find(), { noReady: true });
+  publishCount(this, 'posts', Posts.find(), { noReady: true });
   return Posts.find({}, { limit: 10 });
 });
 ```
 
+### nonReactive
+
+If you specify `{nonReactive: true}` the cursor won't be observed and only the initial count will be sent on initially subscribing. This is useful in some cases where reactivity is not desired, and can improve performance.
+ 
 ### countFromFieldLength
 
 `countFromFieldLength` allows you to specify a field to calculate the sum of its length across all documents.
@@ -49,11 +53,20 @@ We could then publish them like:
 
 ```js
 Meteor.publish('posts-likes-count', function() {
-  publishCount(this, 'posts-likes-count', Posts.find(), { countFromFieldLength: 'likes' });
+  publishCount(this, 'posts-likes', Posts.find(), { countFromFieldLength: 'likes' });
 });
 ```
 
 And calling `Counts.get('posts-likes-count')` returns `3`
+
+## Template helper
+
+To easily show the counter value within your templates, you can use the `getPublishedCount` template helper.
+
+Example:
+```html
+<p>There are {{getPublishedCount 'posts'}}</p>
+```
 
 ## Notes
 
