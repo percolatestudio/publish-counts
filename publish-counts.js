@@ -57,7 +57,8 @@ if (Meteor.isServer) {
     initializing = false;
 
     self.onStop(function() {
-      handle.stop();
+      if (handle)
+        handle.stop();
     });
   };
 }
