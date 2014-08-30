@@ -4,10 +4,8 @@ A package to help you publish the count of a cursor, in real time.
 
 ## Installation
 
-publish-counts can be installed with [Meteorite](https://github.com/oortcloud/meteorite/). From inside a Meteorite-managed app:
-
 ``` sh
-$ mrt add publish-counts
+$ meteor add tmeasday:publish-counts
 ```
 
 ## API

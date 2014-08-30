@@ -1,8 +1,0 @@
-{
-  "name": "publish-counts",
-  "description": "Publish the count of a cursor, in real time",
-  "homepage": "https://github.com/percolatestudio/publish-counts",
-  "author": "David Burles (https://github.com/dburles), Tom Coleman (https://github.com/tmeasday)",
-  "version": "0.2.5",
-  "git": "https://github.com/percolatestudio/publish-counts.git"
-}
