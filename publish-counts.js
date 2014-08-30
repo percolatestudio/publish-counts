@@ -2,7 +2,9 @@ if (Meteor.isServer) {
   publishCount = function(self, name, cursor, options) {
     var count = 0;
     var initializing = true;
+    var handle;
     options = options || {};
+    
     if (options.countFromFieldLength)
       var prev = {};
 
@@ -52,7 +54,7 @@ if (Meteor.isServer) {
       self.ready();
 
     if (! options.nonReactive)
-      var handle = cursor.observeChanges(observers);
+      handle = cursor.observeChanges(observers);
 
     initializing = false;
 
@@ -63,12 +65,12 @@ if (Meteor.isServer) {
 
     return {
       stop: function() {
-        if (handle){
+        if (handle) {
           handle.stop();
           handle = undefined;
         }
       }
-    }
+    };
   };
 }
 
