@@ -63,7 +63,7 @@ To easily show the counter value within your templates, you can use the `getPubl
 
 Example:
 ```html
-<p>There are {{getPublishedCount 'posts'}}</p>
+<p>There are {{getPublishedCount 'posts'}} posts</p>
 ```
 
 ## Notes
