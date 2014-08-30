@@ -60,6 +60,15 @@ if (Meteor.isServer) {
       if (handle)
         handle.stop();
     });
+
+    return {
+      stop: function() {
+        if (handle){
+          handle.stop();
+          handle = undefined;
+        }
+      }
+    }
   };
 }
 
