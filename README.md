@@ -20,6 +20,8 @@ Meteor.publish('publication', function() {
 
 On the client side, once you've subscribed to `'publication'`, you can call `Counts.get('name-of-counter')` to get the value of the counter, reactively.
 
+The `publishCount` function returns the observer handle that's used to maintain the counter. You can call its `stop` method in order to stop the observer from running.
+
 ## Options
 
 ### Readiness
