@@ -1,5 +1,6 @@
 if (Meteor.isServer) {
-  publishCount = function(self, name, cursor, options) {
+  Counts = {};
+  Counts.publish = function(self, name, cursor, options) {
     var count = 0;
     var initializing = true;
     var handle;
@@ -72,6 +73,8 @@ if (Meteor.isServer) {
       }
     };
   };
+  // back compatibility
+  publishCount = Counts.publish;
 }
 
 if (Meteor.isClient) {

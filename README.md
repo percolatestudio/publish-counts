@@ -10,17 +10,17 @@ $ meteor add tmeasday:publish-counts
 
 ## API
 
-Simply call `publishCount` within a publication, passing in a name and a cursor:
+Simply call `Counts.publish` within a publication, passing in a name and a cursor:
 
 ```js
 Meteor.publish('publication', function() {
-  publishCount(this, 'name-of-counter', Posts.find());
+  Counts.publish(this, 'name-of-counter', Posts.find());
 });
 ```
 
 On the client side, once you've subscribed to `'publication'`, you can call `Counts.get('name-of-counter')` to get the value of the counter, reactively.
 
-The `publishCount` function returns the observer handle that's used to maintain the counter. You can call its `stop` method in order to stop the observer from running.
+The `Counts.publish` function returns the observer handle that's used to maintain the counter. You can call its `stop` method in order to stop the observer from running.
 
 ## Options
 
@@ -30,7 +30,7 @@ If you publish a count within a publication that also returns cursor(s), you pro
 
 ```js
 Meteor.publish('posts-with-count', function() {
-  publishCount(this, 'posts', Posts.find(), { noReady: true });
+  Counts.publish(this, 'posts', Posts.find(), { noReady: true });
   return Posts.find({}, { limit: 10 });
 });
 ```
@@ -53,7 +53,7 @@ We could then publish them like:
 
 ```js
 Meteor.publish('posts-likes-count', function() {
-  publishCount(this, 'posts-likes', Posts.find(), { countFromFieldLength: 'likes' });
+  Counts.publish(this, 'posts-likes', Posts.find(), { countFromFieldLength: 'likes' });
 });
 ```
 

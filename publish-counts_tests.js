@@ -20,7 +20,7 @@ if (Meteor.isServer) {
   });
 
   Meteor.publish('counts', function(testId) {
-    publishCount(this, 'posts' + testId, Posts.find({ testId: testId }));
+    Counts.publish(this, 'posts' + testId, Posts.find({ testId: testId }));
   });
 
   Meteor.methods({
@@ -44,7 +44,7 @@ if (Meteor.isServer) {
 
   // Tinytest.add("Confirm observe handles start and stop", function(test) {
   //   var pub = new PubMock();
-  //   publishCount(pub, 'posts' + test.id, Posts.find({ testId: test.id }));
+  //   Counts.publish(pub, 'posts' + test.id, Posts.find({ testId: test.id }));
   //   test.equal(factsByPackage['mongo-livedata']['observe-handles'], 1);
   //   pub.stop();
   //   test.equal(factsByPackage['mongo-livedata']['observe-handles'], 0);
@@ -52,13 +52,13 @@ if (Meteor.isServer) {
 
   Tinytest.add("Adding noReady option stops ready being called", function(test) {
     var pub = new PubMock();
-    publishCount(pub, 'posts' + test.id, Posts.find({ testId: test.id }));
+    Counts.publish(pub, 'posts' + test.id, Posts.find({ testId: test.id }));
     test.isTrue(pub._ready);
     
-    var pub = new PubMock();
-    publishCount(pub, 'posts' + test.id, Posts.find({ testId: test.id }), {noReady: true});
+    pub = new PubMock();
+    Counts.publish(pub, 'posts' + test.id, Posts.find({ testId: test.id }), {noReady: true});
     test.isFalse(pub._ready);
-  })
+  });
 }
 
 if (Meteor.isClient) {
