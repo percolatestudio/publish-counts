@@ -78,7 +78,7 @@ if (Meteor.isServer) {
 }
 
 if (Meteor.isClient) {
-  Counts = new Meteor.Collection('counts');
+  Counts = new Mongo.Collection('counts');
 
   Counts.get = function(name) {
     var count = this.findOne(name);
