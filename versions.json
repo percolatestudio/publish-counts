@@ -2,7 +2,7 @@
   "dependencies": [
     [
       "application-configuration",
-      "1.0.1-rc0"
+      "1.0.1-glasser1"
     ],
     [
       "binary-heap",
@@ -10,7 +10,7 @@
     ],
     [
       "blaze",
-      "2.0.0-rc1"
+      "2.0.0-rc0"
     ],
     [
       "callback-hook",
@@ -23,10 +23,6 @@
     [
       "ddp",
       "1.0.8-rc0"
-    ],
-    [
-      "deps",
-      "1.0.2-rc1"
     ],
     [
       "ejson",
@@ -42,7 +38,7 @@
     ],
     [
       "htmljs",
-      "1.0.0-cordova1"
+      "1.0.0"
     ],
     [
       "id-map",
@@ -58,19 +54,19 @@
     ],
     [
       "logging",
-      "1.0.2-cordova2"
+      "1.0.2-cordova1"
     ],
     [
       "meteor",
-      "1.1.0-rc0"
+      "1.1.0"
     ],
     [
       "minimongo",
-      "1.0.2-rc2"
+      "1.0.2-glasser1"
     ],
     [
       "mongo",
-      "1.0.4-rc0"
+      "1.0.5"
     ],
     [
       "observe-sequence",
@@ -94,11 +90,11 @@
     ],
     [
       "tracker",
-      "1.0.2-rc1"
+      "1.0.2-rc0"
     ],
     [
       "ui",
-      "1.0.1-rc0"
+      "1.0.2"
     ],
     [
       "underscore",
@@ -106,6 +102,6 @@
     ]
   ],
   "pluginDependencies": [],
-  "toolVersion": "meteor-tool@1.0.28-cordova6",
+  "toolVersion": "meteor-tool@1.0.30",
   "format": "1.0"
 }

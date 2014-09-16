@@ -1,12 +1,12 @@
 Package.describe({
   name: "tmeasday:publish-counts",
   summary: "Publish the count of a cursor, in real time",
-  version: "0.3.1-rc0",
+  version: "0.3.1",
   git: "https://github.com/percolatestudio/publish-counts.git"
 });
 
 Package.on_use(function (api, where) {
-  api.versionsFrom("METEOR@0.9.2-rc0")
+  api.versionsFrom("METEOR@0.9.2")
   api.use(['ui', 'mongo'], 'client');
   api.add_files('publish-counts.js');
   api.export('Counts', 'client');
