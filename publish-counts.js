@@ -1,5 +1,5 @@
+Counts = {};
 if (Meteor.isServer) {
-  Counts = {};
   Counts.publish = function(self, name, cursor, options) {
     var count = 0;
     var initializing = true;
