@@ -2,7 +2,11 @@
   "dependencies": [
     [
       "application-configuration",
-      "1.0.1-rc0"
+      "1.0.2"
+    ],
+    [
+      "base64",
+      "1.0.0"
     ],
     [
       "binary-heap",
@@ -10,7 +14,7 @@
     ],
     [
       "blaze",
-      "2.0.0-rc1"
+      "2.0.1"
     ],
     [
       "callback-hook",
@@ -18,23 +22,23 @@
     ],
     [
       "check",
-      "1.0.0"
+      "1.0.1"
     ],
     [
       "ddp",
-      "1.0.8-rc0"
+      "1.0.9"
     ],
     [
       "deps",
-      "1.0.2-rc1"
+      "1.0.4"
     ],
     [
       "ejson",
-      "1.0.1-rc0"
+      "1.0.3"
     ],
     [
       "follower-livedata",
-      "1.0.1-rc0"
+      "1.0.1"
     ],
     [
       "geojson-utils",
@@ -42,7 +46,7 @@
     ],
     [
       "htmljs",
-      "1.0.0-cordova1"
+      "1.0.1"
     ],
     [
       "id-map",
@@ -58,23 +62,23 @@
     ],
     [
       "logging",
-      "1.0.2-cordova2"
+      "1.0.3"
     ],
     [
       "meteor",
-      "1.1.0-rc0"
+      "1.1.1"
     ],
     [
       "minimongo",
-      "1.0.2-rc2"
+      "1.0.3"
     ],
     [
       "mongo",
-      "1.0.4-rc0"
+      "1.0.6"
     ],
     [
       "observe-sequence",
-      "1.0.2-rc0"
+      "1.0.2"
     ],
     [
       "ordered-dict",
@@ -86,7 +90,7 @@
     ],
     [
       "reactive-var",
-      "1.0.1-rc0"
+      "1.0.2"
     ],
     [
       "retry",
@@ -94,11 +98,7 @@
     ],
     [
       "tracker",
-      "1.0.2-rc1"
-    ],
-    [
-      "ui",
-      "1.0.1-rc0"
+      "1.0.2"
     ],
     [
       "underscore",
@@ -106,6 +106,6 @@
     ]
   ],
   "pluginDependencies": [],
-  "toolVersion": "meteor-tool@1.0.28-cordova6",
+  "toolVersion": "meteor-tool@1.0.32",
   "format": "1.0"
 }

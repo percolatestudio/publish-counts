@@ -6,8 +6,8 @@ Package.describe({
 });
 
 Package.on_use(function (api, where) {
-  api.versionsFrom("METEOR@0.9.2-rc0")
-  api.use(['ui', 'mongo'], 'client');
+  api.versionsFrom("METEOR@0.9.2");
+  api.use(['blaze', 'mongo'], 'client');
   api.add_files('publish-counts.js');
   api.export('Counts', 'client');
   api.export(['Counts', 'publishCount'], 'server');
