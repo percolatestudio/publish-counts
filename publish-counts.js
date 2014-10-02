@@ -25,7 +25,7 @@ if (Meteor.isServer) {
 
           count += fields[options.countFromFieldLength].length;
           prev[id] = count;
-        } else if (! initializing) {
+        } else {
           count += 1;
         }
         
@@ -52,8 +52,7 @@ if (Meteor.isServer) {
     }
 
     if (! options.countFromFieldLength && initializing) {
-      count = cursor.count();
-      self.added('counts', name, { count: count });
+      self.added('counts', name, { count: cursor.count() });
       if (! options.noReady)
         self.ready();
     }
