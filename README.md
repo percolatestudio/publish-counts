@@ -57,7 +57,7 @@ Meteor.publish('posts-likes-count', function() {
 });
 ```
 
-And calling `Counts.get('posts-likes-count')` returns `3`
+And calling `Counts.get('posts-likes')` returns `3`
 
 ## Template helper
 
