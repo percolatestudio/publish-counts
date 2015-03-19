@@ -18,6 +18,14 @@ Meteor.publish('publication', function() {
 });
 ```
 
+**Note for Coffeescript users** Don't accidentially return the observe handle from Counts.publish. Instead return null
+
+```coffee
+Meteor.publish 'publication', ->
+  Counts.publish(this, 'name-of-counter', Posts.find())
+  return
+```
+
 On the client side, once you've subscribed to `'publication'`, you can call `Counts.get('name-of-counter')` to get the value of the counter, reactively.
 
 The `Counts.publish` function returns the observer handle that's used to maintain the counter. You can call its `stop` method in order to stop the observer from running.
