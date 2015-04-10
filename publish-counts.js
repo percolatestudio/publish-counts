@@ -93,8 +93,9 @@ if (Meteor.isClient) {
     var count = this.findOne(name);
     return count && count.count;
   };
-  
-  UI.registerHelper('getPublishedCount', function(name) {
-    return Counts.get(name);
-  });
+  if(Package.blaze){
+    UI.registerHelper('getPublishedCount', function(name) {
+      return Counts.get(name);
+    });
+  }
 }
