@@ -8,7 +8,7 @@ if (Meteor.isServer) {
 
     if (options.countFromFieldLength && options.nonReactive)
       throw new Error("options.nonReactive is not yet supported with options.countFromFieldLength");
-    
+
     if (options.countFromFieldLength)
       var prev = {};
 
@@ -16,7 +16,7 @@ if (Meteor.isServer) {
     cursor._cursorDescription.options.fields = {_id: true};
     if (options.countFromFieldLength)
       cursor._cursorDescription.options.fields[options.countFromFieldLength] = true;
-    
+
     var observers = {
       added: function(id, fields) {
         if (options.countFromFieldLength) {
@@ -28,7 +28,7 @@ if (Meteor.isServer) {
         } else {
           count += 1;
         }
-        
+
         if (! initializing)
           self.changed('counts', name, { count: count });
       },
@@ -46,7 +46,7 @@ if (Meteor.isServer) {
         next = fields[options.countFromFieldLength].length;
         count += next - prev[id];
         prev[id] = next;
-        
+
         self.changed('counts', name, { count: count });
       };
     }
@@ -62,7 +62,7 @@ if (Meteor.isServer) {
 
     if (options.countFromFieldLength)
       self.added('counts', name, { count: count });
-     
+
     if (! options.noReady)
       self.ready();
 
