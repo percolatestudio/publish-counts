@@ -1,7 +1,7 @@
 Package.describe({
   name: "tmeasday:publish-counts",
   summary: "Publish the count of a cursor, in real time",
-  version: "0.3.6",
+  version: "0.3.7",
   git: "https://github.com/percolatestudio/publish-counts.git"
 });
 
