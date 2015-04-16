@@ -91,7 +91,7 @@ if (Meteor.isClient) {
 
   Counts.get = function(name) {
     var count = this.findOne(name);
-    return count && count.count;
+    return count && count.count || 0;
   };
 
   if (Package.blaze) {
