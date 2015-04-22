@@ -94,8 +94,8 @@ if (Meteor.isClient) {
     return count && count.count || 0;
   };
 
-  if (Package.blaze) {
-    Template.registerHelper('getPublishedCount', function(name) {
+  if (Package.templating) {
+    Package.templating.Template.registerHelper('getPublishedCount', function(name) {
       return Counts.get(name);
     });
   }
