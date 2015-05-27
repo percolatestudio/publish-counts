@@ -37,6 +37,13 @@ if (Meteor.isServer) {
     });
   });
 
+  // options.countFromFieldSum
+  Meteor.publish('counts4', function(testId) {
+    Counts.publish(this, 'posts' + testId, Posts.find({ testId: testId }), {
+      countFromFieldSum: 'number'
+    });
+  });
+
   Meteor.methods({
     setup: function(testId) {
       Posts.insert({ testId: testId, name: "i'm a test post" });
@@ -47,6 +54,13 @@ if (Meteor.isServer) {
       Posts.insert({ testId: testId, array: ['a', 'b'] });
       Posts.insert({ testId: testId, array: ['a', 'b', 'c'] });
       Posts.insert({ testId: testId, array: ['a'] });
+      // Because we should handle missing fields
+      Posts.insert({ testId: testId });
+    },
+    setup3: function(testId) {
+      Posts.insert({ testId: testId, number: 5 });
+      Posts.insert({ testId: testId, number: 1 });
+      Posts.insert({ testId: testId, number: 3 });
       // Because we should handle missing fields
       Posts.insert({ testId: testId });
     }
@@ -117,6 +131,15 @@ if (Meteor.isClient) {
     Meteor.call('setup2', test.id, function() {
       Meteor.subscribe('counts2', test.id, function() {
         test.equal(Counts.get('posts' + test.id), 6);
+        done();
+      });
+    });
+  });
+
+  Tinytest.addAsync("countFromFieldSum is correct", function(test, done) {
+    Meteor.call('setup3', test.id, function() {
+      Meteor.subscribe('counts4', test.id, function() {
+        test.equal(Counts.get('posts' + test.id), 9);
         done();
       });
     });

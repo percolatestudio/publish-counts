@@ -57,7 +57,26 @@ Meteor.publish('posts-likes-count', function() {
 });
 ```
 
-And calling `Counts.get('posts-likes')` returns `3`
+### countFromFieldSum
+
+`countFromFieldSum` allows you to specify a field to calculate the sum of its numbers across all documents.
+For example if we were to store page visits as numbers on a field called `visits`:
+
+```
+{ content: 'testing', visits: 100 },
+{ content: 'a comment', visits: 50 }
+```
+
+We could then publish them like:
+
+```js
+Meteor.publish('posts-visits-count', function() {
+  Counts.publish(this, 'posts-visits', Posts.find(), { countFromFieldSum: 'visits' });
+});
+```
+
+
+And calling `Counts.get('posts-visits')` returns `150`
 
 ## Template helper
 
