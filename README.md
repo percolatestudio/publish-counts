@@ -38,10 +38,31 @@ Meteor.publish('posts-with-count', function() {
 ### nonReactive
 
 If you specify `{nonReactive: true}` the cursor won't be observed and only the initial count will be sent on initially subscribing. This is useful in some cases where reactivity is not desired, and can improve performance.
- 
+
+### countFromField
+
+`countFromField` allows you to specify a field to calculate the sum of its numbers across all documents.
+For example if we were to store page visits as numbers on a field called `visits`:
+
+```
+{ content: 'testing', visits: 100 },
+{ content: 'a comment', visits: 50 }
+```
+
+We could then publish them like:
+
+```js
+Meteor.publish('posts-visits-count', function() {
+  Counts.publish(this, 'posts-visits', Posts.find(), { countFromField: 'visits' });
+});
+```
+
+
+And calling `Counts.get('posts-visits')` returns `150`
+
 ### countFromFieldLength
 
-`countFromFieldLength` allows you to specify a field to calculate the sum of its length across all documents.
+`countFromFieldLength` allows you to specify a field to calculate the sum of its **length** across all documents.
 For example if we were to store the userIds in an array on a field called `likes`:
 
 ```
@@ -57,27 +78,6 @@ Meteor.publish('posts-likes-count', function() {
 });
 ```
 
-### countFromFieldSum
-
-`countFromFieldSum` allows you to specify a field to calculate the sum of its numbers across all documents.
-For example if we were to store page visits as numbers on a field called `visits`:
-
-```
-{ content: 'testing', visits: 100 },
-{ content: 'a comment', visits: 50 }
-```
-
-We could then publish them like:
-
-```js
-Meteor.publish('posts-visits-count', function() {
-  Counts.publish(this, 'posts-visits', Posts.find(), { countFromFieldSum: 'visits' });
-});
-```
-
-
-And calling `Counts.get('posts-visits')` returns `150`
-
 ## Template helper
 
 To easily show the counter value within your templates, you can use the `getPublishedCount` template helper.
@@ -91,7 +91,7 @@ Example:
 
 The package includes a test that checks the number of observer handles opened and closed (to check for memory leaks). You need to run the `enable-publication-tests-0.7.0.1` branch of `percolatestudio/meteor` to run it however.
 
-## License 
+## License
 
 MIT. (c) Percolate Studio
 

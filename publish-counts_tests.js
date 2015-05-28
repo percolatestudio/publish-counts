@@ -37,10 +37,10 @@ if (Meteor.isServer) {
     });
   });
 
-  // options.countFromFieldSum
+  // options.countFromField
   Meteor.publish('counts4', function(testId) {
     Counts.publish(this, 'posts' + testId, Posts.find({ testId: testId }), {
-      countFromFieldSum: 'number'
+      countFromField: 'number'
     });
   });
 
@@ -51,22 +51,28 @@ if (Meteor.isServer) {
       Posts.insert({ testId: testId, name: "i'm a test post" });
     },
     setup2: function(testId) {
-      Posts.insert({ testId: testId, array: ['a', 'b'] });
+      Posts.insert({ _id: 'first' + testId, testId: testId, array: ['a', 'b'] });
       Posts.insert({ testId: testId, array: ['a', 'b', 'c'] });
       Posts.insert({ testId: testId, array: ['a'] });
       // Because we should handle missing fields
       Posts.insert({ testId: testId });
     },
     setup3: function(testId) {
-      Posts.insert({ testId: testId, number: 5 });
+      Posts.insert({ _id: 'first' + testId, testId: testId, number: 5 });
       Posts.insert({ testId: testId, number: 1 });
       Posts.insert({ testId: testId, number: 3 });
       // Because we should handle missing fields
       Posts.insert({ testId: testId });
+    },
+    update2: function(testId) {
+      Posts.update({_id: 'first' + testId}, {$set: {array: []}});
+    },
+    update3: function(testId) {
+      Posts.update({ _id: 'first' + testId}, {$set: {number: 3}});
     }
   });
 
-  // 
+  //
   // We've forked Meteor in order to run this test.
   // `factsByPackage` has been exported from the Facts package.
   // To run this test, add:
@@ -75,7 +81,7 @@ if (Meteor.isServer) {
   //   "branch": "enable-publication-tests-0.7.0.1"
   // },
   // to the project smart.json
-  // 
+  //
 
   // Tinytest.add("Confirm observe handles start and stop", function(test) {
   //   var pub = new PubMock();
@@ -89,7 +95,7 @@ if (Meteor.isServer) {
     var pub = new PubMock();
     Counts.publish(pub, 'posts' + test.id, Posts.find({ testId: test.id }));
     test.isTrue(pub._ready);
-    
+
     pub = new PubMock();
     Counts.publish(pub, 'posts' + test.id, Posts.find({ testId: test.id }), {noReady: true});
     test.isFalse(pub._ready);
@@ -131,16 +137,22 @@ if (Meteor.isClient) {
     Meteor.call('setup2', test.id, function() {
       Meteor.subscribe('counts2', test.id, function() {
         test.equal(Counts.get('posts' + test.id), 6);
-        done();
+        Meteor.call('update2', test.id, function() {
+          test.equal(Counts.get('posts' + test.id), 4);
+          done();
+        });
       });
     });
   });
 
-  Tinytest.addAsync("countFromFieldSum is correct", function(test, done) {
+  Tinytest.addAsync("countFromField is correct", function(test, done) {
     Meteor.call('setup3', test.id, function() {
       Meteor.subscribe('counts4', test.id, function() {
         test.equal(Counts.get('posts' + test.id), 9);
-        done();
+        Meteor.call('update3', test.id, function() {
+          test.equal(Counts.get('posts' + test.id), 7);
+          done();
+        });
       });
     });
   });
@@ -157,5 +169,5 @@ if (Meteor.isClient) {
       });
     });
   });
-  
+
 }

@@ -1,38 +1,45 @@
 if (Meteor.isServer) {
   Counts = {};
   Counts.publish = function(self, name, cursor, options) {
-    var count = 0;
     var initializing = true;
     var handle;
     options = options || {};
 
-    if ((options.countFromFieldLength || options.countFromFieldSum) && options.nonReactive)
+    var extraField, countFn;
+
+    if (options.countFromField) {
+      extraField = options.countFromField;
+      countFn = function(doc) {
+        return doc[extraField];
+      }
+    } else if (options.countFromFieldLength) {
+      extraField = options.countFromFieldLength;
+      countFn = function(doc) {
+        return doc[extraField].length;
+      }
+    }
+
+
+    if (countFn && options.nonReactive)
       throw new Error("options.nonReactive is not yet supported with options.countFromFieldLength or options.countFromFieldSum");
 
-    if (options.countFromFieldLength || options.countFromFieldSum)
+    if (countFn)
       var prev = {};
 
     // ensure the cursor doesn't fetch more than it has to
     cursor._cursorDescription.options.fields = {_id: true};
-    if (options.countFromFieldLength)
-      cursor._cursorDescription.options.fields[options.countFromFieldLength] = true;
+    if (extraField)
+      cursor._cursorDescription.options.fields[extraField] = true;
 
-    if (options.countFromFieldSum)
-      cursor._cursorDescription.options.fields[options.countFromFieldSum] = true;
-
+    var count = 0;
     var observers = {
       added: function(id, fields) {
-        if (options.countFromFieldLength) {
-          if (!fields[options.countFromFieldLength])
+        if (countFn) {
+          if (!fields[extraField])
             return;
 
-          count += fields[options.countFromFieldLength].length;
-          prev[id] = count;
-        } else if (options.countFromFieldSum) {
-          if (!fields[options.countFromFieldSum])
-            return;
-          count += fields[options.countFromFieldSum];
-          prev[id] = count;
+          prev[id] = countFn(fields);
+          count += prev[id];
         } else {
           count += 1;
         }
@@ -41,45 +48,35 @@ if (Meteor.isServer) {
           self.changed('counts', name, {count: count});
       },
       removed: function(id, fields) {
-        var subs = 1;
-        if (options.countFromFieldLength) {
-          subs = fields[options.countFromFieldLength].length;
+        if (countFn) {
+          if (!fields[extraField])
+            return;
+
+          count -= countFn(fields);
+          delete prev[id];
+        } else {
+          count -= 1;
         }
-        if (options.countFromFieldSum) {
-          subs = fields[options.countFromFieldSum];
-        }
-        count -= subs;
         self.changed('counts', name, {count: count});
       }
     };
 
-    if (options.countFromFieldLength) {
+    if (countFn) {
       observers.changed = function(id, fields) {
-        if (!fields[options.countFromFieldLength])
-          return;
+        if (countFn) {
+          if (!fields[extraField])
+            return;
 
-        next = fields[options.countFromFieldLength].length;
-        count += next - prev[id];
-        prev[id] = next;
+          var next = countFn(fields);
+          count += next - prev[id];
+          prev[id] = next;
+        }
 
         self.changed('counts', name, {count: count});
       };
     }
 
-    if (options.countFromFieldSum) {
-      observers.changed = function(id, fields) {
-        if (!fields[options.countFromFieldSum])
-          return;
-
-        next = fields[options.countFromFieldSum];
-        count += next - prev[id];
-        prev[id] = next;
-
-        self.changed('counts', name, {count: count});
-      };
-    }
-
-    if (!options.countFromFieldLength && !options.countFromFieldSum && initializing) {
+    if (!countFn) {
       self.added('counts', name, {count: cursor.count()});
       if (!options.noReady)
         self.ready();
@@ -88,10 +85,7 @@ if (Meteor.isServer) {
     if (!options.nonReactive)
       handle = cursor.observeChanges(observers);
 
-    if (options.countFromFieldLength)
-      self.added('counts', name, {count: count});
-
-    if (options.countFromFieldSum)
+    if (countFn)
       self.added('counts', name, {count: count});
 
     if (!options.noReady)
