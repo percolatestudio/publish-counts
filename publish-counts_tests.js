@@ -65,10 +65,10 @@ if (Meteor.isServer) {
       Posts.insert({ testId: testId });
     },
     update2: function(testId) {
-      Posts.update({_id: 'first' + testId}, {$set: {array: []}});
+      Posts.update({ _id: 'first' + testId}, {$set: {array: []} });
     },
     update3: function(testId) {
-      Posts.update({ _id: 'first' + testId}, {$set: {number: 3}});
+      Posts.update({ _id: 'first' + testId}, {$set: {number: 3} });
     }
   });
 
