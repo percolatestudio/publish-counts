@@ -68,7 +68,7 @@ if (Meteor.isServer) {
             return;
 
           var next = countFn(fields);
-          count += next - prev[id];
+          count += next - (prev[id] || 0);
           prev[id] = next;
         }
 

@@ -28,6 +28,9 @@ if (Meteor.isServer) {
     Counts.publish(this, 'posts' + testId, Posts.find({ testId: testId }), {
       countFromFieldLength: 'array'
     });
+    Counts.publish(this, 'posts2' + testId, Posts.find({ _id: 'second' + testId }), {
+      countFromFieldLength: 'array'
+    });
   });
 
   // options.nonReactive
@@ -56,6 +59,7 @@ if (Meteor.isServer) {
       Posts.insert({ testId: testId, array: ['a'] });
       // Because we should handle missing fields
       Posts.insert({ testId: testId });
+      Posts.insert({ _id: 'second' + testId });
     },
     setup3: function(testId) {
       Posts.insert({ _id: 'first' + testId, testId: testId, number: 5 });
@@ -65,10 +69,11 @@ if (Meteor.isServer) {
       Posts.insert({ testId: testId });
     },
     update2: function(testId) {
-      Posts.update({_id: 'first' + testId}, {$set: {array: []}});
+      Posts.update({ _id: 'first' + testId}, {$set: {array: []} });
+      Posts.update({ _id: 'second' + testId }, {$push: {array: ['a']} });
     },
     update3: function(testId) {
-      Posts.update({ _id: 'first' + testId}, {$set: {number: 3}});
+      Posts.update({ _id: 'first' + testId}, {$set: {number: 3} });
     }
   });
 
@@ -137,8 +142,10 @@ if (Meteor.isClient) {
     Meteor.call('setup2', test.id, function() {
       Meteor.subscribe('counts2', test.id, function() {
         test.equal(Counts.get('posts' + test.id), 6);
+        test.equal(Counts.get('posts2' + test.id), 0);
         Meteor.call('update2', test.id, function() {
           test.equal(Counts.get('posts' + test.id), 4);
+          test.equal(Counts.get('posts2' + test.id), 1);
           done();
         });
       });
