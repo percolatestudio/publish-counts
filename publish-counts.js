@@ -45,11 +45,11 @@ if (Meteor.isServer) {
 
     var count = 0;
     var observers = {
-      added: function(id, fields) {
+      added: function(doc) {
         if (countFn) {
 
           try {
-            prev[id] = countFn(fields);
+            prev[id] = countFn(doc);
             count += prev[id];
           } catch (err) {
             if (err instanceof TypeError) {
@@ -65,10 +65,10 @@ if (Meteor.isServer) {
         if (!initializing)
           self.changed('counts', name, {count: count});
       },
-      removed: function(id, fields) {
+      removed: function(doc) {
         if (countFn) {
           try {
-            count -= countFn(fields);
+            count -= countFn(doc);
             delete prev[id];
           } catch (err) {
             if (err instanceof TypeError) {
@@ -85,10 +85,10 @@ if (Meteor.isServer) {
     };
 
     if (countFn) {
-      observers.changed = function(id, fields) {
+      observers.changed = function(newDoc, oldDoc) {
         if (countFn) {
           try {
-            var next = countFn(fields);
+            var next = countFn(newDoc);
             count += next - prev[id];
             prev[id] = next;
           } catch (err) {
@@ -111,7 +111,7 @@ if (Meteor.isServer) {
     }
 
     if (!options.nonReactive)
-      handle = cursor.observeChanges(observers);
+      handle = cursor.observe(observers);
 
     if (countFn)
       self.added('counts', name, {count: count});
