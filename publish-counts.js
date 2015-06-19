@@ -33,9 +33,6 @@ if (Meteor.isServer) {
     if (countFn && options.nonReactive)
       throw new Error("options.nonReactive is not yet supported with options.countFromFieldLength or options.countFromFieldSum");
 
-    if (countFn)
-      var prev = {};
-
     if ('function' !== typeof extraField) {
       // ensure the cursor doesn't fetch more than it has to
       cursor._cursorDescription.options.fields = {_id: true};
@@ -49,8 +46,7 @@ if (Meteor.isServer) {
         if (countFn) {
 
           try {
-            prev[id] = countFn(doc);
-            count += prev[id];
+            count += countFn(doc);
           } catch (err) {
             if (err instanceof TypeError) {
               return;
@@ -69,7 +65,6 @@ if (Meteor.isServer) {
         if (countFn) {
           try {
             count -= countFn(doc);
-            delete prev[id];
           } catch (err) {
             if (err instanceof TypeError) {
               return;
@@ -88,9 +83,7 @@ if (Meteor.isServer) {
       observers.changed = function(newDoc, oldDoc) {
         if (countFn) {
           try {
-            var next = countFn(newDoc);
-            count += next - prev[id];
-            prev[id] = next;
+            count += countFn(newDoc) - countFn(oldDoc);
           } catch (err) {
             if (err instanceof TypeError) {
               return;
