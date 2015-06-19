@@ -25,7 +25,11 @@ Package.on_test(function (api) {
     'tests/count_test.js',
     'tests/count_non_reactive_test.js',
     'tests/count_from_field_shallow_test.js',
+    'tests/count_from_field_fn_shallow_test.js',
+    'tests/count_from_field_fn_deep_test.js',
     'tests/count_from_field_length_shallow_test.js',
+    'tests/count_from_field_length_fn_shallow_test.js',
+    'tests/count_from_field_length_fn_deep_test.js',
     'tests/no_ready_test.js',
     'tests/observe_handles_test.js',
   ]);
