@@ -32,6 +32,15 @@ if (Meteor.isServer) {
       cursor._cursorDescription.options.fields[extraField] = true;
 
     var count = 0;
+    
+    if(options.fastCount){
+      if(cursor._cursorDescription.options.limit)
+        throw new Error("There is no reason to use fastCount with limit.  fastCount is to enable large data sets to have fast but potentially inaccurate cursors.");
+
+      count = cursor.count();
+      cursor._cursorDescription.options.skip = count;
+    }
+    
     var observers = {
       added: function(id, fields) {
         if (countFn) {
