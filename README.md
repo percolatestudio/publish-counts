@@ -57,8 +57,27 @@ Meteor.publish('posts-visits-count', function() {
 });
 ```
 
-
 And calling `Counts.get('posts-visits')` returns `150`
+
+If the counter field is deeply nested, e.g.:
+
+```
+{ content: 'testing', stats: { visits: 100 } },
+{ content: 'a comment', stats: { visits: 50 } }
+```
+
+Then use an accessor function instead like:
+
+```js
+Meteor.publish('posts-visits-count', function() {
+  Counts.publish(this, 'posts-visits',
+    Posts.find({}, { fields: { _id: 1, 'stats.visits': 1 }}),
+    { countFromField: function (doc) { return doc.stats.visits; } }
+  );
+});
+```
+
+Note that when using an accessor function, you must limit the fields fetched if desired, otherwise Counts will fetch entire documents as it updates the count.
 
 ### countFromFieldLength
 
@@ -77,6 +96,26 @@ Meteor.publish('posts-likes-count', function() {
   Counts.publish(this, 'posts-likes', Posts.find(), { countFromFieldLength: 'likes' });
 });
 ```
+
+If the counter field is deeply nested, e.g.:
+
+```
+{ content: 'testing', popularity: { likes: ['6PNw4GQKMA8CLprZf', 'HKv4S7xQ52h6KsXQ7'] } },
+{ content: 'a comment', popularity: { likes: ['PSmYXrxpwg276aPf5'] } }
+```
+
+Then use an accessor function instead like:
+
+```js
+Meteor.publish('posts-likes-count', function() {
+  Counts.publish(this, 'posts-likes',
+    Posts.find({}, { fields: { _id: 1, 'popularity.likes': 1 }}),
+    { countFromFieldLength: function (doc) { return doc.popularity.likes; } }
+  );
+});
+```
+
+Note that when using an accessor function, you must limit the fields fetched if desired, otherwise Counts will fetch entire documents as it updates the count.
 
 ## Template helper
 

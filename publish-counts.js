@@ -9,13 +9,23 @@ if (Meteor.isServer) {
 
     if (options.countFromField) {
       extraField = options.countFromField;
-      countFn = function(doc) {
-        return doc[extraField];
+      if ('function' === typeof extraField) {
+        countFn = extraField;
+      } else {
+        countFn = function(doc) {
+          return doc[extraField];
+        }
       }
     } else if (options.countFromFieldLength) {
       extraField = options.countFromFieldLength;
-      countFn = function(doc) {
-        return doc[extraField].length;
+      if ('function' === typeof extraField) {
+        countFn = function(doc) {
+          return extraField(doc).length;
+        }
+      } else {
+        countFn = function(doc) {
+          return doc[extraField].length;
+        }
       }
     }
 
@@ -23,23 +33,27 @@ if (Meteor.isServer) {
     if (countFn && options.nonReactive)
       throw new Error("options.nonReactive is not yet supported with options.countFromFieldLength or options.countFromFieldSum");
 
-    if (countFn)
-      var prev = {};
-
-    // ensure the cursor doesn't fetch more than it has to
-    cursor._cursorDescription.options.fields = {_id: true};
-    if (extraField)
-      cursor._cursorDescription.options.fields[extraField] = true;
+    if ('function' !== typeof extraField) {
+      // ensure the cursor doesn't fetch more than it has to
+      cursor._cursorDescription.options.fields = {_id: true};
+      if (extraField)
+        cursor._cursorDescription.options.fields[extraField] = true;
+    }
 
     var count = 0;
     var observers = {
-      added: function(id, fields) {
+      added: function(doc) {
         if (countFn) {
-          if (!fields[extraField])
-            return;
 
-          prev[id] = countFn(fields);
-          count += prev[id];
+          try {
+            count += countFn(doc);
+          } catch (err) {
+            if (err instanceof TypeError) {
+              return;
+            } else {
+              throw err;
+            }
+          }
         } else {
           count += 1;
         }
@@ -47,13 +61,17 @@ if (Meteor.isServer) {
         if (!initializing)
           self.changed('counts', name, {count: count});
       },
-      removed: function(id, fields) {
+      removed: function(doc) {
         if (countFn) {
-          if (!fields[extraField])
-            return;
-
-          count -= countFn(fields);
-          delete prev[id];
+          try {
+            count -= countFn(doc);
+          } catch (err) {
+            if (err instanceof TypeError) {
+              return;
+            } else {
+              throw err;
+            }
+          }
         } else {
           count -= 1;
         }
@@ -62,14 +80,17 @@ if (Meteor.isServer) {
     };
 
     if (countFn) {
-      observers.changed = function(id, fields) {
+      observers.changed = function(newDoc, oldDoc) {
         if (countFn) {
-          if (!fields[extraField])
-            return;
-
-          var next = countFn(fields);
-          count += next - prev[id];
-          prev[id] = next;
+          try {
+            count += countFn(newDoc) - countFn(oldDoc);
+          } catch (err) {
+            if (err instanceof TypeError) {
+              return;
+            } else {
+              throw err;
+            }
+          }
         }
 
         self.changed('counts', name, {count: count});
@@ -83,7 +104,7 @@ if (Meteor.isServer) {
     }
 
     if (!options.nonReactive)
-      handle = cursor.observeChanges(observers);
+      handle = cursor.observe(observers);
 
     if (countFn)
       self.added('counts', name, {count: count});
