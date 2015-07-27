@@ -20,5 +20,13 @@ Package.on_test(function (api) {
     'tinytest',
     'facts']);
 
-  api.add_files('publish-counts_tests.js');
+  api.add_files([
+    'tests/helper.js',
+    'tests/count_test.js',
+    'tests/count_non_reactive_test.js',
+    'tests/count_from_field_shallow_test.js',
+    'tests/count_from_field_length_shallow_test.js',
+    'tests/no_ready_test.js',
+    'tests/observe_handles_test.js',
+  ]);
 });
