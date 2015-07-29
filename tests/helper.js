@@ -2,14 +2,50 @@ this.Posts = new Meteor.Collection('posts');
 
 // {this} is provided by IIFE that wraps this file
 // H is for helper
-this.H = {}
+this.H = {};
 
+// added for use with console mock.  used to detect when a method call's first
+// argument matches the regex.  use found() for later assertion test.
+this.H.detectRegex = function (regex) {
+  var found = false;
+
+  fn = function (actual) {
+    if (found) return actual;   // once regex passes, never reset the found flag.
+    found = regex.test(actual);
+    return actual
+  }
+
+  fn.found = function () { return found; }    // accessor for later assertion test.
+
+  return fn;
+}
 
 // helper function to construct a unique, but consistent, id for each test
 // document.
 this.H.docId = function docId (testId, docNum) {
   return '' + testId + '-' + docNum;
 }
+
+// helper function to wrap console mock initialization and restoration around a
+// code block.  to test warnings to user/devs.
+this.H.withConsole = (function withConsole (conmock, fn) {
+  var mock = function (from, to, backup) {
+    backup = backup || {};
+
+    _.each(from, function (v, k) {
+      // only copy shallow properties
+      if (from.hasOwnProperty(k)) {
+        backup[k] = to[k];
+        to[k] = from[k];
+      }
+    });
+  };
+
+  var backup = {};
+  mock(conmock, this.console, backup);    // mock methods of console.
+  fn();
+  mock(backup, this.console)              // restore methods of console.
+}).bind(this);
 
 
 if (Meteor.isServer) {

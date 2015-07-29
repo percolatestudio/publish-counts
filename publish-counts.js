@@ -33,12 +33,7 @@ if (Meteor.isServer) {
     if (countFn && options.nonReactive)
       throw new Error("options.nonReactive is not yet supported with options.countFromFieldLength or options.countFromFieldSum");
 
-    if ('function' !== typeof extraField) {
-      // ensure the cursor doesn't fetch more than it has to
-      cursor._cursorDescription.options.fields = {_id: true};
-      if (extraField)
-        cursor._cursorDescription.options.fields[extraField] = true;
-    }
+    cursor._cursorDescription.options.fields = Counts._optimizeQueryFields(cursor._cursorDescription.options.fields, extraField);
 
     var count = 0;
     var observers = {
@@ -130,6 +125,54 @@ if (Meteor.isServer) {
   };
   // back compatibility
   publishCount = Counts.publish;
+
+
+  Counts._optimizeQueryFields = function optimizeQueryFields (fields, extraField) {
+    switch (typeof extraField) {
+      case 'function':      // accessor function used.
+        if (undefined === fields) {
+          // user did not place restrictions on cursor fields.
+          console.warn('publish-counts: Collection cursor has no field limits and will fetch entire documents.  ' +
+                      'consider specifying only required fields.');
+          // if cursor field limits are empty to begin with, leave them empty.  it is the
+          // user's responsibility to specify field limits when using accessor functions.
+        }
+        // else user specified restrictions on cursor fields.  Meteor will ensure _id is one of them.
+        // WARNING: unable to verify user included appropriate field for accessor function to work.  we can't hold their hand ;_;
+
+        return fields;
+
+      case 'string':        // countFromField or countFromFieldLength has property name.
+        // extra field is a property
+
+        // automatically set limits if none specified.  keep existing limits since user
+        // may use a cursor transform and specify a dynamic field to count, but require other
+        // fields in the transform process  (e.g. https://github.com/percolatestudio/publish-counts/issues/47).
+        fields = fields || {};
+        // _id and extraField are required
+        fields._id = true;
+        fields[extraField] = true;
+
+        if (2 < _.keys(fields).length)
+          console.warn('publish-counts: unused fields detected in cursor fields option', _.omit(fields, ['_id', extraField]));
+
+        // use modified field limits.  automatically defaults to _id and extraField if none specified by user.
+        return fields;
+
+      case 'undefined':     // basic count
+        if (fields && 0 < _.keys(_.omit(fields, ['_id'])).length)
+          console.warn('publish-counts: unused fields removed from cursor fields option.', _.omit(fields, ['_id']));
+
+        // dispose of user field limits, only _id is required
+        fields = { _id:  true };
+
+        // use modified field limits.  automatically defaults to _id if none specified by user.
+        return fields;
+
+      default:
+        throw new Error("unknown invocation of Count.publish() detected.");
+    }
+  }
 }
 
 if (Meteor.isClient) {
