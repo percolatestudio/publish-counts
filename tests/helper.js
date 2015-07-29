@@ -80,7 +80,22 @@ if (Meteor.isServer) {
   }
 
   this.H.update = function update (testId, docNum, modifier) {
+    // ensure testId is not modified.  it's used to segregrate documents to
+    // keep tests isolated.
+    if (hasModifiers(modifier)) {
+      modifier.$set = modifier.$set || {};
+      modifier.$set.testId = testId;
+    } else {
+      modifier.testId = testId;
+    }
+
     Posts.update(H.docId(testId, docNum), modifier);
+  }
+
+  function hasModifiers (mongoModifier) {
+    return _.keys(mongoModifier).some(function (key) {
+      return /^\$/.test(key);
+    });
   }
 }
 
