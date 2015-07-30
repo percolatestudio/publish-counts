@@ -18,6 +18,12 @@ if (Meteor.isServer) {
     removeDoc_deep_countFromField_fn: function (testId) {
       H.remove(testId, 0);
     },
+    addField_deep_countFromField_fn: function (testId) {
+      H.update(testId, 0, {a: {b: 4}});
+    },
+    removeField_deep_countFromField_fn: function (testId) {
+      H.update(testId, 0, {});
+    },
   });
 }
 
@@ -72,6 +78,25 @@ if (Meteor.isClient) {
           var delta = H.getCount(test.id) - before;
           test.equal(delta, -2);
           done();
+        });
+      });
+    });
+  });
+
+  Tinytest.addAsync("countFromField: (fn deep) after 1) removing count field parent, 2) readding count field, adjust count by gain minus loss", function (test, done) {
+    var delta;
+    Meteor.call('setup_deep_countFromField_fn', test.id, function () {
+      Meteor.subscribe('count_from_field_fn_deep', test.id, function () {
+        var before = H.getCount(test.id);
+        Meteor.call('removeField_deep_countFromField_fn', test.id, function () {
+          delta = H.getCount(test.id) - before;
+          test.equal(delta, -2, 'removing field did not update count');
+
+          Meteor.call('addField_deep_countFromField_fn', test.id, function () {
+            delta = H.getCount(test.id) - before;
+            test.equal(delta, +2, 'adding field did not update count');
+            done();
+          });
         });
       });
     });

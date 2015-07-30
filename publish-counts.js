@@ -10,21 +10,25 @@ if (Meteor.isServer) {
     if (options.countFromField) {
       extraField = options.countFromField;
       if ('function' === typeof extraField) {
-        countFn = extraField;
+        countFn = Counts._safeAccessorFunction(extraField);
       } else {
         countFn = function(doc) {
-          return doc[extraField];
+          return doc[extraField] || 0;    // return 0 instead of undefined.
         }
       }
     } else if (options.countFromFieldLength) {
       extraField = options.countFromFieldLength;
       if ('function' === typeof extraField) {
-        countFn = function(doc) {
+        countFn = Counts._safeAccessorFunction(function (doc) {
           return extraField(doc).length;
-        }
+        });
       } else {
         countFn = function(doc) {
-          return doc[extraField].length;
+          if (doc[extraField]) {
+            return doc[extraField].length;
+          } else {
+            return 0;
+          }
         }
       }
     }
@@ -39,16 +43,7 @@ if (Meteor.isServer) {
     var observers = {
       added: function(doc) {
         if (countFn) {
-
-          try {
-            count += countFn(doc);
-          } catch (err) {
-            if (err instanceof TypeError) {
-              return;
-            } else {
-              throw err;
-            }
-          }
+          count += countFn(doc);
         } else {
           count += 1;
         }
@@ -58,15 +53,7 @@ if (Meteor.isServer) {
       },
       removed: function(doc) {
         if (countFn) {
-          try {
-            count -= countFn(doc);
-          } catch (err) {
-            if (err instanceof TypeError) {
-              return;
-            } else {
-              throw err;
-            }
-          }
+          count -= countFn(doc);
         } else {
           count -= 1;
         }
@@ -77,15 +64,7 @@ if (Meteor.isServer) {
     if (countFn) {
       observers.changed = function(newDoc, oldDoc) {
         if (countFn) {
-          try {
-            count += countFn(newDoc) - countFn(oldDoc);
-          } catch (err) {
-            if (err instanceof TypeError) {
-              return;
-            } else {
-              throw err;
-            }
-          }
+          count += countFn(newDoc) - countFn(oldDoc);
         }
 
         self.changed('counts', name, {count: count});
@@ -126,6 +105,22 @@ if (Meteor.isServer) {
   // back compatibility
   publishCount = Counts.publish;
 
+  Counts._safeAccessorFunction = function safeAccessorFunction (fn) {
+    // ensure that missing fields don't corrupt the count.  If the count field
+    // doesn't exist, then it has a zero count.
+    return function (doc) {
+      try {
+        return fn(doc) || 0;    // return 0 instead of undefined
+      }
+      catch (err) {
+        if (err instanceof TypeError) {   // attempted to access property of undefined (i.e. deep access).
+          return 0;
+        } else {
+          throw err;
+        }
+      }
+    };
+  }
 
   Counts._optimizeQueryFields = function optimizeQueryFields (fields, extraField) {
     switch (typeof extraField) {
