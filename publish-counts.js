@@ -5,7 +5,7 @@ if (Meteor.isServer) {
     var handle;
     options = options || {};
 
-    var extraField, countFn;
+    var extraField, countFn, additionalFields = options.fields || [];
 
     if (options.countFromField) {
       extraField = options.countFromField;
@@ -37,7 +37,7 @@ if (Meteor.isServer) {
     if (countFn && options.nonReactive)
       throw new Error("options.nonReactive is not yet supported with options.countFromFieldLength or options.countFromFieldSum");
 
-    cursor._cursorDescription.options.fields = Counts._optimizeQueryFields(cursor._cursorDescription.options.fields, extraField);
+    cursor._cursorDescription.options.fields = Counts._optimizeQueryFields(cursor._cursorDescription.options.fields, extraField, additionalFields);
 
     var count = 0;
     var observers = {
@@ -122,7 +122,7 @@ if (Meteor.isServer) {
     };
   }
 
-  Counts._optimizeQueryFields = function optimizeQueryFields (fields, extraField) {
+  Counts._optimizeQueryFields = function optimizeQueryFields (fields, extraField, additionalFields) {
     switch (typeof extraField) {
       case 'function':      // accessor function used.
         if (undefined === fields) {
@@ -148,18 +148,26 @@ if (Meteor.isServer) {
         fields._id = true;
         fields[extraField] = true;
 
+        _.each(additionalFields, function(field) {
+          fields[field] = true;
+        });
+
         if (2 < _.keys(fields).length)
-          console.warn('publish-counts: unused fields detected in cursor fields option', _.omit(fields, ['_id', extraField]));
+          console.warn('publish-counts: unused fields detected in cursor fields option', _.omit(fields, _.union(['_id', extraField], additionalFields)));
 
         // use modified field limits.  automatically defaults to _id and extraField if none specified by user.
         return fields;
 
       case 'undefined':     // basic count
-        if (fields && 0 < _.keys(_.omit(fields, ['_id'])).length)
+        if (fields && 0 < _.keys(_.omit(fields, _.union(['_id'], additionalFields)).length))
           console.warn('publish-counts: unused fields removed from cursor fields option.', _.omit(fields, ['_id']));
 
         // dispose of user field limits, only _id is required
         fields = { _id:  true };
+
+        _.each(additionalFields, function(field) {
+          fields[field] = true;
+        });
 
         // use modified field limits.  automatically defaults to _id if none specified by user.
         return fields;
