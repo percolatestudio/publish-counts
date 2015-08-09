@@ -10,17 +10,34 @@ $ meteor add tmeasday:publish-counts
 
 ## API
 
+### Counts.publish [server]
+
+`Counts.publish(subscription, counter-name, cursor, options)`
+
 Simply call `Counts.publish` within a publication, passing in a name and a cursor:
 
+#### Example 1
 ```js
 Meteor.publish('publication', function() {
   Counts.publish(this, 'name-of-counter', Posts.find());
 });
 ```
 
-On the client side, once you've subscribed to `'publication'`, you can call `Counts.get('name-of-counter')` to get the value of the counter, reactively.
-
 The `Counts.publish` function returns the observer handle that's used to maintain the counter. You can call its `stop` method in order to stop the observer from running.
+
+For more info regarding the `options` parameter, see [Options](#options).
+
+### Counts.get [client]
+
+Once you've subscribed to `'publication'` ([Ex 1](#example-1)), you can call `Counts.get('name-of-counter')` to get the value of the counter, reactively.
+
+This function will always return an integer, `0` is returned if the counter is neither published nor subscribed to.
+
+### Counts.has [client]
+
+Returns true if a counter is both published and subscribed to, otherwise returns false.  This function is reactive.
+
+Useful for validating the existence of counters.
 
 ## Options
 
