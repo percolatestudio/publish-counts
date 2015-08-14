@@ -39,6 +39,16 @@ Returns true if a counter is both published and subscribed to, otherwise returns
 
 Useful for validating the existence of counters.
 
+### Counts.noWarnings [server]
+
+This function disables all development warnings on the server from publish-counts.
+
+Not recommended for use by development teams, as warnings are meant to inform
+library users of potential conflicts, inefficiencies, etc in their use of
+publish-counts as a sanity check.  Suppressing all warnings precludes this
+sanity check for future changes.  See the [`noWarnings`](#nowarnings) option
+for fine-grained warning suppression.
+
 ## Options
 
 ### Readiness

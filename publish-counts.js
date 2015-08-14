@@ -1,3 +1,5 @@
+var noWarnings = false;
+
 if (Meteor.isServer) {
   Counts = {};
   Counts.publish = function(self, name, cursor, options) {
@@ -106,6 +108,11 @@ if (Meteor.isServer) {
   // back compatibility
   publishCount = Counts.publish;
 
+  Counts.noWarnings = function (noWarn) {
+    // suppress warnings if no arguments, or first argument is truthy
+    noWarnings = (0 == arguments.length || !!noWarn);
+  }
+
   Counts._safeAccessorFunction = function safeAccessorFunction (fn) {
     // ensure that missing fields don't corrupt the count.  If the count field
     // doesn't exist, then it has a zero count.
@@ -176,7 +183,7 @@ if (Meteor.isServer) {
   }
 
   Counts._warn = function warn (noWarn) {
-    if (noWarn)
+    if (noWarnings || noWarn)
       return;
 
     var args = Array.prototype.slice.call(arguments, 1);

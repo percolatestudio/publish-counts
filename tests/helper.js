@@ -92,6 +92,13 @@ if (Meteor.isServer) {
     Posts.update(H.docId(testId, docNum), modifier);
   }
 
+  // helper function to disable then restore the global state for Counts.noWarnings().
+  this.H.withNoWarnings = (function withNoWarnings (fn) {
+    Counts.noWarnings();
+    fn();
+    Counts.noWarnings(false);
+  }).bind(this);
+
   // helper function to modify Counts._warn() then restore it after testing.
   this.H.withWarn = (function withWarn (warn, fn) {
     var backup = Counts._warn;
