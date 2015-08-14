@@ -92,6 +92,14 @@ if (Meteor.isServer) {
     Posts.update(H.docId(testId, docNum), modifier);
   }
 
+  // helper function to modify Counts._warn() then restore it after testing.
+  this.H.withWarn = (function withWarn (warn, fn) {
+    var backup = Counts._warn;
+    Counts._warn = warn;
+    fn();
+    Counts._warn = backup;
+  }).bind(this);
+
   function hasModifiers (mongoModifier) {
     return _.keys(mongoModifier).some(function (key) {
       return /^\$/.test(key);

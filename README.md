@@ -134,6 +134,20 @@ Meteor.publish('posts-likes-count', function() {
 
 Note that when using an accessor function, you must limit the fields fetched if desired, otherwise Counts will fetch entire documents as it updates the count.
 
+### noWarnings
+
+Pass the option, `noWarnings: true`, to `Counts.publish` to disable its warnings in
+a development environment.
+
+Each call to `Counts.publish` may print warnings to the console to inform
+developers of non-fatal conflicts with publish-counts.  In some situations, a
+developer may intentionally invoke `Counts.publish` in a way that generates a
+warnings.  Use this option to disable warnings for a particular invocation of
+`Counts.publish`.
+
+This fine-grained method of warning suppression is recommended for development
+teams that rely on warnings with respect to future changes.
+
 ## Template helper
 
 To easily show the counter value within your templates, you can use the `getPublishedCount` template helper.
