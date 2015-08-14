@@ -23,14 +23,14 @@ if (Meteor.isServer) {
 }
 
 if (Meteor.isClient) {
-  Tinytest.addAsync("count: upon subscribe with no records, returns zero", function (test, done) {
+  Tinytest.addAsync("count: - upon subscribe with no records, return zero", function (test, done) {
     Meteor.subscribe('count', test.id, function () {
       test.equal(H.getCount(test.id), 0);
       done();
     });
   });
 
-  Tinytest.addAsync("count: upon subscribe with records, returns number of records", function (test, done) {
+  Tinytest.addAsync("count: - upon subscribe with records, return number of records", function (test, done) {
     Meteor.call('setup_count', test.id, function () {
       Meteor.subscribe('count', test.id, function () {
         test.equal(H.getCount(test.id), 3);
@@ -39,7 +39,7 @@ if (Meteor.isClient) {
     });
   });
 
-  Tinytest.addAsync("count: after adding a doc, increments count", function (test, done) {
+  Tinytest.addAsync("count: - after adding a doc, increment count", function (test, done) {
     Meteor.call('setup_count', test.id, function () {
       Meteor.subscribe('count', test.id, function () {
         var before = H.getCount(test.id);
@@ -52,7 +52,7 @@ if (Meteor.isClient) {
     });
   });
 
-  Tinytest.addAsync("count: after updating a doc, count remains the same", function (test, done) {
+  Tinytest.addAsync("count: - after updating a doc, count remains the same", function (test, done) {
     Meteor.call('setup_count', test.id, function () {
       Meteor.subscribe('count', test.id, function () {
         var before = H.getCount(test.id);
@@ -65,7 +65,7 @@ if (Meteor.isClient) {
     });
   });
 
-  Tinytest.addAsync("count: after removing a doc, decrements count", function (test, done) {
+  Tinytest.addAsync("count: - after removing a doc, decrement count", function (test, done) {
     Meteor.call('setup_count', test.id, function () {
       Meteor.subscribe('count', test.id, function () {
         var before = H.getCount(test.id);

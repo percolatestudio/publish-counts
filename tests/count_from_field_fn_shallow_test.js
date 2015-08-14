@@ -28,14 +28,14 @@ if (Meteor.isServer) {
 }
 
 if (Meteor.isClient) {
-  Tinytest.addAsync("countFromField: (fn shallow) upon subscribe with no records, returns zero", function (test, done) {
+  Tinytest.addAsync("countFromField: (fn shallow) - upon subscribe with no records, return zero", function (test, done) {
     Meteor.subscribe('count_from_field_fn_shallow', test.id, function () {
       test.equal(H.getCount(test.id), 0);
       done();
     });
   });
 
-  Tinytest.addAsync("countFromField: (fn shallow) upon subscribe with records, returns sum of count fields", function (test, done) {
+  Tinytest.addAsync("countFromField: (fn shallow) - upon subscribe with records, return sum of count fields", function (test, done) {
     Meteor.call('setup_shallow_countFromField_fn', test.id, function () {
       Meteor.subscribe('count_from_field_fn_shallow', test.id, function () {
         test.equal(H.getCount(test.id), 5);
@@ -44,7 +44,7 @@ if (Meteor.isClient) {
     });
   });
 
-  Tinytest.addAsync("countFromField: (fn shallow) after adding a doc, increments sum by new count field", function (test, done) {
+  Tinytest.addAsync("countFromField: (fn shallow) - after adding a doc, increment sum by new count field", function (test, done) {
     Meteor.call('setup_shallow_countFromField_fn', test.id, function () {
       Meteor.subscribe('count_from_field_fn_shallow', test.id, function () {
         var before = H.getCount(test.id);
@@ -57,7 +57,7 @@ if (Meteor.isClient) {
     });
   });
 
-  Tinytest.addAsync("countFromField: (fn shallow) after updating the count field of a doc, adjusts sum by change in count field", function (test, done) {
+  Tinytest.addAsync("countFromField: (fn shallow) - after updating the count field of a doc, adjust sum by change in count field", function (test, done) {
     Meteor.call('setup_shallow_countFromField_fn', test.id, function () {
       Meteor.subscribe('count_from_field_fn_shallow', test.id, function () {
         var before = H.getCount(test.id);
@@ -70,7 +70,7 @@ if (Meteor.isClient) {
     });
   });
 
-  Tinytest.addAsync("countFromField: (fn shallow) after removing a doc, decrements sum by previous count value", function (test, done) {
+  Tinytest.addAsync("countFromField: (fn shallow) - after removing a doc, decrement sum by previous count value", function (test, done) {
     Meteor.call('setup_shallow_countFromField_fn', test.id, function () {
       Meteor.subscribe('count_from_field_fn_shallow', test.id, function () {
         var before = H.getCount(test.id);
@@ -83,7 +83,7 @@ if (Meteor.isClient) {
     });
   });
 
-  Tinytest.addAsync("countFromField: (fn shallow) after 1) removing count field, 2) readding count field, adjust count by gain minus loss", function (test, done) {
+  Tinytest.addAsync("countFromField: (fn shallow) - after 1) removing count field, 2) readding count field, adjust count by gain minus loss", function (test, done) {
     Meteor.call('setup_shallow_countFromField_fn', test.id, function () {
       Meteor.subscribe('count_from_field_fn_shallow', test.id, function () {
         var before = H.getCount(test.id);

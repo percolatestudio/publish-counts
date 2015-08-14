@@ -1,5 +1,5 @@
 if (Meteor.isServer) {
-  Tinytest.add("fieldLimit: (countFromFieldLength fn) upon publish without field limit, warn user that entire documents are fetched", function (test) {
+  Tinytest.add("fieldLimit: (countFromFieldLength fn) - upon publish without field limit, warn user that entire documents are fetched", function (test) {
     var pub = new H.PubMock();
     var cursor = Posts.find({ testId: test.id });   // no field limit
     var conmock = { warn: H.detectRegex(/Collection cursor has no field limits and will fetch entire documents.  consider specifying only required fields./) };
@@ -17,7 +17,7 @@ if (Meteor.isServer) {
     test.isUndefined(fields, 'Count must keep empty cursor fields limits when user uses accessor function');
   });
 
-  Tinytest.add("fieldLimit: (countFromFieldLength fn) upon publish with count field assigned to field limit, keep existing field limit", function (test) {
+  Tinytest.add("fieldLimit: (countFromFieldLength fn) - upon publish with count field assigned to field limit, keep existing field limit", function (test) {
     var pub = new H.PubMock();
     var cursor = Posts.find({ testId: test.id }, { fields: { likes: true }});   // field limit matches countFromField property.
 
@@ -34,7 +34,7 @@ if (Meteor.isServer) {
   // the user should always include the field used in the accessor function in the cursor field limit.
   // there is no means to automatically include the count field in the cursor field limit and chaos will ensue when
   // the user fails to handle this.
-  Tinytest.add("fieldLimit: (countFromFieldLength fn) upon publish with other fields assigned to field limit, keep existing field limit", function (test) {
+  Tinytest.add("fieldLimit: (countFromFieldLength fn) - upon publish with other fields assigned to field limit, keep existing field limit", function (test) {
     var pub = new H.PubMock();
     var cursor = Posts.find({ testId: test.id }, { fields: { name: true, likes: true }});    // field limit must match countFromField property.
 

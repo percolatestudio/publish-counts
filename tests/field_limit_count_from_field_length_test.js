@@ -1,5 +1,5 @@
 if (Meteor.isServer) {
-  Tinytest.add("fieldLimit: (countFromFieldLength) upon publish without field limit, automatically limit cursor fields to _id and count field", function (test) {
+  Tinytest.add("fieldLimit: (countFromFieldLength) - upon publish without field limit, automatically limit cursor fields to _id and count field", function (test) {
     var pub = new H.PubMock();
     var cursor = Posts.find({ testId: test.id });   // no field limit
 
@@ -14,7 +14,7 @@ if (Meteor.isServer) {
     test.equal(_.keys(fields).length, 2, 'cursor has more/less than two fields');
   });
 
-  Tinytest.add("fieldLimit: (countFromFieldLength) upon publish with count field assigned to field limit, keep existing field limit plus _id", function (test) {
+  Tinytest.add("fieldLimit: (countFromFieldLength) - upon publish with count field assigned to field limit, keep existing field limit plus _id", function (test) {
     var pub = new H.PubMock();
     var cursor = Posts.find({ testId: test.id }, { fields: { likes: true }});   // field limit matches countFromField
 
@@ -30,7 +30,7 @@ if (Meteor.isServer) {
   });
 
   // honestly, devs should never have a reason to do this.  the 'name' field in this example is never used, nor can it ever be.
-  Tinytest.add("fieldLimit: (countFromFieldLength) upon publish with other fields assigned to field limit, warn user and keep existing field limit plus _id and count field", function (test) {
+  Tinytest.add("fieldLimit: (countFromFieldLength) - upon publish with other fields assigned to field limit, warn user and keep existing field limit plus _id and count field", function (test) {
     var pub = new H.PubMock();
     var cursor = Posts.find({ testId: test.id }, { fields: { name: true }});
     var conmock = { warn: H.detectRegex(/unused fields detected in cursor fields option/) };

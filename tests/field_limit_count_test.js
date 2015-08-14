@@ -1,5 +1,5 @@
 if (Meteor.isServer) {
-  Tinytest.add("fieldLimit: (count) upon publish without field limit, automatically limit cursor fields to _id", function (test) {
+  Tinytest.add("fieldLimit: (count) - upon publish without field limit, automatically limit cursor fields to _id", function (test) {
     var pub = new H.PubMock();
     var cursor = Posts.find({ testId: test.id });     // no field limit
 
@@ -13,7 +13,7 @@ if (Meteor.isServer) {
     test.equal(_.keys(fields).length, 1, 'cursor has more than one field')
   });
 
-  Tinytest.add("fieldLimit: (count) upon publish with field limit, warn user and limit cursor fields to _id", function (test) {
+  Tinytest.add("fieldLimit: (count) - upon publish with field limit, warn user and limit cursor fields to _id", function (test) {
     var pub = new H.PubMock();
     var cursor = Posts.find({ testId: test.id }, { fields: { name: true }});    // field manually limited to name
     var conmock = { warn: H.detectRegex(/unused fields removed from cursor fields option/) };

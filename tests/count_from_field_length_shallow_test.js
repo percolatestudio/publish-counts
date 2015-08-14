@@ -28,14 +28,14 @@ if (Meteor.isServer) {
 }
 
 if (Meteor.isClient) {
-  Tinytest.addAsync("countFromFieldLength: (shallow) upon subscribe with no records, returns zero", function (test, done) {
+  Tinytest.addAsync("countFromFieldLength: (shallow) - upon subscribe with no records, return zero", function (test, done) {
     Meteor.subscribe('count_from_field_length_shallow', test.id, function () {
       test.equal(H.getCount(test.id), 0);
       done();
     });
   });
 
-  Tinytest.addAsync("countFromFieldLength: (shallow) upon subscribe with records, returns sum of lengths of array fields", function (test, done) {
+  Tinytest.addAsync("countFromFieldLength: (shallow) - upon subscribe with records, return sum of lengths of array fields", function (test, done) {
     Meteor.call('setup_shallow_countFromFieldLength', test.id, function () {
       Meteor.subscribe('count_from_field_length_shallow', test.id, function () {
         test.equal(H.getCount(test.id), 7);
@@ -44,7 +44,7 @@ if (Meteor.isClient) {
     });
   });
 
-  Tinytest.addAsync("countFromFieldLength: (shallow) after adding a doc, increments count by new array length", function (test, done) {
+  Tinytest.addAsync("countFromFieldLength: (shallow) - after adding a doc, increment count by new array length", function (test, done) {
     Meteor.call('setup_shallow_countFromFieldLength', test.id, function () {
       Meteor.subscribe('count_from_field_length_shallow', test.id, function () {
         var before = H.getCount(test.id);
@@ -57,7 +57,7 @@ if (Meteor.isClient) {
     });
   });
 
-  Tinytest.addAsync("countFromFieldLength: (shallow) after updating the array field of a doc, adjusts count by change in array length", function (test, done) {
+  Tinytest.addAsync("countFromFieldLength: (shallow) - after updating the array field of a doc, adjust count by change in array length", function (test, done) {
     Meteor.call('setup_shallow_countFromFieldLength', test.id, function () {
       Meteor.subscribe('count_from_field_length_shallow', test.id, function () {
         var before = H.getCount(test.id);
@@ -70,7 +70,7 @@ if (Meteor.isClient) {
     });
   });
 
-  Tinytest.addAsync("countFromFieldLength: (shallow) after removing a doc, decrements count by array length", function (test, done) {
+  Tinytest.addAsync("countFromFieldLength: (shallow) - after removing a doc, decrement count by array length", function (test, done) {
     Meteor.call('setup_shallow_countFromFieldLength', test.id, function () {
       Meteor.subscribe('count_from_field_length_shallow', test.id, function () {
         var before = H.getCount(test.id);
@@ -83,7 +83,7 @@ if (Meteor.isClient) {
     });
   });
 
-  Tinytest.addAsync("countFromFieldLength: (shallow) after 1) removing count field, 2) readding count field, adjust count by gain minus loss", function (test, done) {
+  Tinytest.addAsync("countFromFieldLength: (shallow) - after 1) removing count field, 2) readding count field, adjust count by gain minus loss", function (test, done) {
     Meteor.call('setup_shallow_countFromFieldLength', test.id, function () {
       Meteor.subscribe('count_from_field_length_shallow', test.id, function () {
         var before = H.getCount(test.id);

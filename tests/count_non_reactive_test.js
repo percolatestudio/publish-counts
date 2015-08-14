@@ -20,14 +20,14 @@ if (Meteor.isServer) {
 }
 
 if (Meteor.isClient) {
-  Tinytest.addAsync("count: (non-reactive) upon subscribe with no records, returns zero", function (test, done) {
+  Tinytest.addAsync("count: (non-reactive) - upon subscribe with no records, return zero", function (test, done) {
     Meteor.subscribe('count_non_reactive', test.id, function () {
       test.equal(H.getCount(test.id), 0);
       done();
     });
   });
 
-  Tinytest.addAsync("count: (non-reactive) upon subscribe with records, returns number of records", function (test, done) {
+  Tinytest.addAsync("count: (non-reactive) - upon subscribe with records, return number of records", function (test, done) {
     Meteor.call('setup_countNonReactive', test.id, function () {
       Meteor.subscribe('count_non_reactive', test.id, function () {
         test.equal(H.getCount(test.id), 3);
@@ -36,7 +36,7 @@ if (Meteor.isClient) {
     });
   });
 
-  Tinytest.addAsync("count: (non-reactive) after adding a doc, count remains same", function (test, done) {
+  Tinytest.addAsync("count: (non-reactive) - after adding a doc, count remains same", function (test, done) {
     Meteor.call('setup_countNonReactive', test.id, function () {
       Meteor.subscribe('count_non_reactive', test.id, function () {
         var before = H.getCount(test.id);
@@ -49,7 +49,7 @@ if (Meteor.isClient) {
     });
   });
 
-  Tinytest.addAsync("count: (non-reactive) after removing a doc, count remains same", function (test, done) {
+  Tinytest.addAsync("count: (non-reactive) - after removing a doc, count remains same", function (test, done) {
     Meteor.call('setup_countNonReactive', test.id, function () {
       Meteor.subscribe('count_non_reactive', test.id, function () {
         var before = H.getCount(test.id);
