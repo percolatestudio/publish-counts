@@ -183,7 +183,7 @@ if (Meteor.isServer) {
   }
 
   Counts._warn = function warn (noWarn) {
-    if (noWarnings || noWarn)
+    if (noWarnings || noWarn || 'production' == process.env.NODE_ENV)
       return;
 
     var args = Array.prototype.slice.call(arguments, 1);

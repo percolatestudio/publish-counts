@@ -64,4 +64,17 @@ if (Meteor.isServer) {
     // verify the warning was sent to user
     test.isTrue(conmock.warn.found(), 'warning did not print after Count.noWarnings(false)');
   });
+
+  Tinytest.add("Counts._warn: - suppress warnings in production environment", function (test) {
+    var conmock = { warn: H.detectRegex(/test/) };
+
+    H.withConsole(conmock, function () {
+      H.withNodeEnv({ NODE_ENV: 'production' }, function () {
+        Counts._warn(false, 'test');
+      });
+    });
+
+    // verify the warning was suppressed
+    test.isFalse(conmock.warn.found(), 'production environment did not suppress warning');
+  });
 }
