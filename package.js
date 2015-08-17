@@ -37,6 +37,7 @@ Package.on_test(function (api) {
     'tests/field_limit_count_from_field_length_test.js',
     'tests/field_limit_count_from_field_length_fn_test.js',
     'tests/no_ready_test.js',
+    'tests/no_warn_test.js',
     'tests/observe_handles_test.js',
   ]);
 });

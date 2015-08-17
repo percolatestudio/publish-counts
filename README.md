@@ -39,6 +39,16 @@ Returns true if a counter is both published and subscribed to, otherwise returns
 
 Useful for validating the existence of counters.
 
+### Counts.noWarnings [server]
+
+This function disables all development warnings on the server from publish-counts.
+
+Not recommended for use by development teams, as warnings are meant to inform
+library users of potential conflicts, inefficiencies, etc in their use of
+publish-counts as a sanity check.  Suppressing all warnings precludes this
+sanity check for future changes.  See the [`noWarnings`](#nowarnings) option
+for fine-grained warning suppression.
+
 ## Options
 
 ### Readiness
@@ -133,6 +143,20 @@ Meteor.publish('posts-likes-count', function() {
 ```
 
 Note that when using an accessor function, you must limit the fields fetched if desired, otherwise Counts will fetch entire documents as it updates the count.
+
+### noWarnings
+
+Pass the option, `noWarnings: true`, to `Counts.publish` to disable its warnings in
+a development environment.
+
+Each call to `Counts.publish` may print warnings to the console to inform
+developers of non-fatal conflicts with publish-counts.  In some situations, a
+developer may intentionally invoke `Counts.publish` in a way that generates a
+warnings.  Use this option to disable warnings for a particular invocation of
+`Counts.publish`.
+
+This fine-grained method of warning suppression is recommended for development
+teams that rely on warnings with respect to future changes.
 
 ## Template helper
 

@@ -92,6 +92,29 @@ if (Meteor.isServer) {
     Posts.update(H.docId(testId, docNum), modifier);
   }
 
+  // helper function to modify node environment variables then restore them after testing.
+  this.H.withNodeEnv = (function withNodeEnv (env, fn) {
+    var backup = process.env;
+    process.env = _.extend({}, backup, env);
+    fn();
+    process.env = backup;
+  }).bind(this);
+
+  // helper function to disable then restore the global state for Counts.noWarnings().
+  this.H.withNoWarnings = (function withNoWarnings (fn) {
+    Counts.noWarnings();
+    fn();
+    Counts.noWarnings(false);
+  }).bind(this);
+
+  // helper function to modify Counts._warn() then restore it after testing.
+  this.H.withWarn = (function withWarn (warn, fn) {
+    var backup = Counts._warn;
+    Counts._warn = warn;
+    fn();
+    Counts._warn = backup;
+  }).bind(this);
+
   function hasModifiers (mongoModifier) {
     return _.keys(mongoModifier).some(function (key) {
       return /^\$/.test(key);

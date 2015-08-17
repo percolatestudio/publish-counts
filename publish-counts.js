@@ -1,3 +1,5 @@
+var noWarnings = false;
+
 if (Meteor.isServer) {
   Counts = {};
   Counts.publish = function(self, name, cursor, options) {
@@ -37,7 +39,8 @@ if (Meteor.isServer) {
     if (countFn && options.nonReactive)
       throw new Error("options.nonReactive is not yet supported with options.countFromFieldLength or options.countFromFieldSum");
 
-    cursor._cursorDescription.options.fields = Counts._optimizeQueryFields(cursor._cursorDescription.options.fields, extraField);
+    cursor._cursorDescription.options.fields =
+      Counts._optimizeQueryFields(cursor._cursorDescription.options.fields, extraField, options.noWarnings);
 
     var count = 0;
     var observers = {
@@ -105,6 +108,11 @@ if (Meteor.isServer) {
   // back compatibility
   publishCount = Counts.publish;
 
+  Counts.noWarnings = function (noWarn) {
+    // suppress warnings if no arguments, or first argument is truthy
+    noWarnings = (0 == arguments.length || !!noWarn);
+  }
+
   Counts._safeAccessorFunction = function safeAccessorFunction (fn) {
     // ensure that missing fields don't corrupt the count.  If the count field
     // doesn't exist, then it has a zero count.
@@ -122,13 +130,14 @@ if (Meteor.isServer) {
     };
   }
 
-  Counts._optimizeQueryFields = function optimizeQueryFields (fields, extraField) {
+  Counts._optimizeQueryFields = function optimizeQueryFields (fields, extraField, noWarn) {
     switch (typeof extraField) {
       case 'function':      // accessor function used.
         if (undefined === fields) {
           // user did not place restrictions on cursor fields.
-          console.warn('publish-counts: Collection cursor has no field limits and will fetch entire documents.  ' +
-                      'consider specifying only required fields.');
+          Counts._warn(noWarn,
+                       'publish-counts: Collection cursor has no field limits and will fetch entire documents.  ' +
+                       'consider specifying only required fields.');
           // if cursor field limits are empty to begin with, leave them empty.  it is the
           // user's responsibility to specify field limits when using accessor functions.
         }
@@ -149,14 +158,18 @@ if (Meteor.isServer) {
         fields[extraField] = true;
 
         if (2 < _.keys(fields).length)
-          console.warn('publish-counts: unused fields detected in cursor fields option', _.omit(fields, ['_id', extraField]));
+          Counts._warn(noWarn,
+                       'publish-counts: unused fields detected in cursor fields option',
+                       _.omit(fields, ['_id', extraField]));
 
         // use modified field limits.  automatically defaults to _id and extraField if none specified by user.
         return fields;
 
       case 'undefined':     // basic count
         if (fields && 0 < _.keys(_.omit(fields, ['_id'])).length)
-          console.warn('publish-counts: unused fields removed from cursor fields option.', _.omit(fields, ['_id']));
+          Counts._warn(noWarn,
+                       'publish-counts: unused fields removed from cursor fields option.',
+                       _.omit(fields, ['_id']));
 
         // dispose of user field limits, only _id is required
         fields = { _id:  true };
@@ -167,6 +180,14 @@ if (Meteor.isServer) {
       default:
         throw new Error("unknown invocation of Count.publish() detected.");
     }
+  }
+
+  Counts._warn = function warn (noWarn) {
+    if (noWarnings || noWarn || 'production' == process.env.NODE_ENV)
+      return;
+
+    var args = Array.prototype.slice.call(arguments, 1);
+    console.warn.apply(console, args);
   }
 }
 
