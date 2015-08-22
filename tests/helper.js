@@ -1,4 +1,4 @@
-this.Posts = new Meteor.Collection('posts');
+this.Posts = new Mongo.Collection('posts');
 
 // {this} is provided by IIFE that wraps this file
 // H is for helper

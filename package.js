@@ -18,6 +18,7 @@ Package.on_test(function (api) {
   api.use([
     'tmeasday:publish-counts',
     'tinytest',
+    'mongo',
     'facts']);
 
   api.add_files([
