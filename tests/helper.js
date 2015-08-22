@@ -67,30 +67,43 @@ if (Meteor.isServer) {
   PubMock.prototype.ready = function() { this._ready = true; };
   this.H.PubMock = PubMock;
 
-  this.H.insert = function insert (testId, docNum, doc) {
-    var testDoc = _.extend({}, doc, {
-      _id:    H.docId(testId, docNum),
-      testId: testId,
-    });
-    Posts.insert(testDoc);
+  this.H.insertFactory = function insertFactory (collection) {
+    // return a DRY function that inserts docs into one collection.
+    return function insert (testId, docNum, doc) {
+      var testDoc = _.extend({}, doc, {
+        _id:    H.docId(testId, docNum),
+        testId: testId,
+      });
+      collection.insert(testDoc);
+    };
   }
 
-  this.H.remove = function remove (testId, docNum) {
-    Posts.remove({_id: H.docId(testId, docNum)});
+  this.H.removeFactory = function removeFactory (collection) {
+    // return a DRY function that removes docs from one collection.
+    return function remove (testId, docNum) {
+      collection.remove({_id: H.docId(testId, docNum)});
+    };
   }
 
-  this.H.update = function update (testId, docNum, modifier) {
-    // ensure testId is not modified.  it's used to segregrate documents to
-    // keep tests isolated.
-    if (hasModifiers(modifier)) {
-      modifier.$set = modifier.$set || {};
-      modifier.$set.testId = testId;
-    } else {
-      modifier.testId = testId;
-    }
+  this.H.updateFactory = function updateFactory (collection) {
+    // return a DRY function that updates docs in one collection.
+    return function update (testId, docNum, modifier) {
+      // ensure testId is not modified.  it's used to segregrate documents to
+      // keep tests isolated.
+      if (hasModifiers(modifier)) {
+        modifier.$set = modifier.$set || {};
+        modifier.$set.testId = testId;
+      } else {
+        modifier.testId = testId;
+      }
 
-    Posts.update(H.docId(testId, docNum), modifier);
+      collection.update(H.docId(testId, docNum), modifier);
+    };
   }
+
+  this.H.insert = this.H.insertFactory(Posts);
+  this.H.remove = this.H.removeFactory(Posts);
+  this.H.update = this.H.updateFactory(Posts);
 
   // helper function to modify node environment variables then restore them after testing.
   this.H.withNodeEnv = (function withNodeEnv (env, fn) {
@@ -123,7 +136,14 @@ if (Meteor.isServer) {
 }
 
 if (Meteor.isClient) {
-  this.H.getCount = function getCount (testId) {
-    return Counts.get('posts' + testId);
+  this.H.getCountFactory = function getCountFactory (name) {
+    // return a DRY function that uses a consistent naming scheme.
+    // {name} allows each test suite to define a unique name for their
+    // respective counter.
+    return function getCount (testId) {
+      return Counts.get('' + name + testId);
+    };
   }
+
+  this.H.getCount = this.H.getCountFactory('posts');
 }
