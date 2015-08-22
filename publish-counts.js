@@ -39,8 +39,10 @@ if (Meteor.isServer) {
     if (countFn && options.nonReactive)
       throw new Error("options.nonReactive is not yet supported with options.countFromFieldLength or options.countFromFieldSum");
 
-    cursor._cursorDescription.options.fields =
-      Counts._optimizeQueryFields(cursor._cursorDescription.options.fields, extraField, options.noWarnings);
+    if (cursor && cursor._cursorDescription) {
+      cursor._cursorDescription.options.fields =
+        Counts._optimizeQueryFields(cursor._cursorDescription.options.fields, extraField, options.noWarnings);
+    }
 
     var count = 0;
     var observers = {
