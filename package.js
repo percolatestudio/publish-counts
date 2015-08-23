@@ -18,12 +18,14 @@ Package.on_test(function (api) {
   api.use([
     'tmeasday:publish-counts',
     'tinytest',
+    'mongo',
     'facts']);
 
   api.add_files([
     'tests/helper.js',
     'tests/has_count_test.js',
     'tests/count_test.js',
+    'tests/count_local_collection_test.js',
     'tests/count_non_reactive_test.js',
     'tests/count_from_field_shallow_test.js',
     'tests/count_from_field_fn_shallow_test.js',
