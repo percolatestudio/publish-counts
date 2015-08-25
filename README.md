@@ -29,17 +29,23 @@ For more info regarding the `options` parameter, see [Options](#options).
 
 ### Counts.get [client]
 
+`Counts.get(counter-name)`
+
 Once you've subscribed to `'publication'` ([Ex 1](#example-1)), you can call `Counts.get('name-of-counter')` to get the value of the counter, reactively.
 
 This function will always return an integer, `0` is returned if the counter is neither published nor subscribed to.
 
 ### Counts.has [client]
 
+`Counts.has(counter-name)`
+
 Returns true if a counter is both published and subscribed to, otherwise returns false.  This function is reactive.
 
 Useful for validating the existence of counters.
 
 ### Counts.noWarnings [server]
+
+`Counts.noWarnings()`
 
 This function disables all development warnings on the server from publish-counts.
 
