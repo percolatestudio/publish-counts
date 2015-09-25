@@ -28,7 +28,8 @@ Meteor.publish('publication', function() {
 ```coffeescript
 Meteor.publish 'publication', ->
   Counts.publish this, 'name-of-counter', Posts.find()
-  return undefined
+  return undefined    # otherwise coffeescript returns a Counts.publish
+                      # handle when Meteor expects a Mongo.Cursor object.
 ```
 
 The `Counts.publish` function returns the observer handle that's used to maintain the counter. You can call its `stop` method in order to stop the observer from running.
