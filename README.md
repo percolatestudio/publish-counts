@@ -19,8 +19,9 @@ Simply call `Counts.publish` within a publication, passing in a name and a curso
 #### Example 1
 ##### JavaScript
 ```js
-Meteor.publish('publication', function() {
-  Counts.publish(this, 'name-of-counter', Posts.find());
+Meteor.publish('posts', function() {
+  Counts.publish(this, 'number-of-posts', Posts.find());
+  return Posts.find();
 });
 ```
 
@@ -33,6 +34,8 @@ Meteor.publish 'publication', ->
 ```
 
 The `Counts.publish` function returns the observer handle that's used to maintain the counter. You can call its `stop` method in order to stop the observer from running.
+
+Make sure you `.find()` separately for the counter and publish return, otherwise you'll get an empty document.
 
 For more info regarding the `options` parameter, see [Options](#options).
 
