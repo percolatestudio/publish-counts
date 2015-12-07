@@ -2,6 +2,11 @@
 
 A package to help you publish the count of a cursor, in real time.
 
+Publish-counts is designed for counting a small number of documents around an
+order of 100.  Due to the real-time capability, this package should not be used
+to count all documents in large datasets.  Maybe some, but not all.  Otherwise
+you will maximize your server's CPU usage as each client connects.
+
 ## Installation
 
 ``` sh
