@@ -2,6 +2,11 @@
 
 A package to help you publish the count of a cursor, in real time.
 
+Publish-counts is designed for counting a small number of documents around an
+order of 100.  Due to the real-time capability, this package should not be used
+to count all documents in large datasets.  Maybe some, but not all.  Otherwise
+you will maximize your server's CPU usage as each client connects.
+
 ## Installation
 
 ``` sh
@@ -187,7 +192,30 @@ Example:
 
 ## Notes
 
+### Observer handle leak testing
+
 The package includes a test that checks the number of observer handles opened and closed (to check for memory leaks). You need to run the `enable-publication-tests-0.7.0.1` branch of `percolatestudio/meteor` to run it however.
+
+### Why doesn't this library count directly in Mongo?
+
+This package is designed primarily for correctness, not performance. That's why
+it's aimed at counting smaller datasets and keeping the count instantly up to
+date.
+
+To achieve perfect correctness in Meteor data layer, we use a database observer
+to know immediately if a relevant change has occurred. This approach does not
+necessarily scale to larger datasets, as the observer needs to cache the entire
+matching dataset (amongst other reasons).
+
+An alternative approach would be to take a .count() of the relevant cursor (or
+perform an aggregation in more complex use cases), and poll it regularly to
+keep up to date. Bulletproof Meteor has a [proof-of-concept][proof-of-concept] of this
+approach.
+
+[proof-of-concept]: https://github.com/bulletproof-meteor/bullet-counter/blob/solution/lib/server.js
+
+We'd love to see someone publish a package that just that for this use case! If
+you do end up making such a package, let us know and we'll link it here.
 
 ## License
 
