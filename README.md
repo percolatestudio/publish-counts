@@ -7,6 +7,26 @@ order of 100.  Due to the real-time capability, this package should not be used
 to count all documents in large datasets.  Maybe some, but not all.  Otherwise
 you will maximize your server's CPU usage as each client connects.
 
+## Table of Contents
+
+- [Installation](https://github.com/percolatestudio/publish-counts#installation)
+- [API](https://github.com/percolatestudio/publish-counts#api)
+  - [Counts.publish](https://github.com/percolatestudio/publish-counts#countspublish-server)
+  - [Counts.get](https://github.com/percolatestudio/publish-counts#countsget-client)
+  - [Counts.has](https://github.com/percolatestudio/publish-counts#countshas-client)
+  - [Counts.noWarnings](https://github.com/percolatestudio/publish-counts#countsnowarnings-server)
+- [Options](https://github.com/percolatestudio/publish-counts#options)
+  - [noReady](https://github.com/percolatestudio/publish-counts#noready)
+  - [nonReactive](https://github.com/percolatestudio/publish-counts#nonreactive)
+  - [countFromField](https://github.com/percolatestudio/publish-counts#countfromfield)
+  - [countFromFieldLength](https://github.com/percolatestudio/publish-counts#countfromfieldlength)
+  - [noWarnings](https://github.com/percolatestudio/publish-counts#nowarnings)
+- [Template helper](https://github.com/percolatestudio/publish-counts#template-helper)
+- [Notes]()
+  - [Observer handle leak testing](https://github.com/percolatestudio/publish-counts#observer-handle-leak-testing)
+  - [Why doesn't this library count directly in Mongo?](https://github.com/percolatestudio/publish-counts#why-doesnt-this-library-count-directly-in-mongo)
+- [License](https://github.com/percolatestudio/publish-counts#license)
+
 ## Installation
 
 ``` sh
@@ -74,7 +94,7 @@ for fine-grained warning suppression.
 
 ## Options
 
-### Readiness
+### noReady
 
 If you publish a count within a publication that also returns cursor(s), you probably want to pass `{noReady: true}` as a final argument to ensure that the "data" publication sets the ready state. For example, the following publication sends down 10 posts, but allows us to see how many there are in total:
 
