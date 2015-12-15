@@ -46,7 +46,6 @@ Simply call `Counts.publish` within a publication, passing in a name and a curso
 ```js
 Meteor.publish('publication', function() {
   Counts.publish(this, 'name-of-counter', Posts.find());
-  return Posts.find();
 });
 ```
 
