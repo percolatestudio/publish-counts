@@ -7,10 +7,14 @@ Counts.get = function countsGet (name) {
 
 Counts.has = function countsHas (name) {
   return !!this.findOne(name);
-}
+};
 
 if (Package.templating) {
   Package.templating.Template.registerHelper('getPublishedCount', function(name) {
     return Counts.get(name);
+  });
+
+  Package.templating.Template.registerHelper('hasPublishedCount', function(name) {
+    return Counts.has(name);
   });
 }
