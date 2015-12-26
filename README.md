@@ -21,7 +21,7 @@ you will maximize your server's CPU usage as each client connects.
   - [countFromField](https://github.com/percolatestudio/publish-counts#countfromfield)
   - [countFromFieldLength](https://github.com/percolatestudio/publish-counts#countfromfieldlength)
   - [noWarnings](https://github.com/percolatestudio/publish-counts#nowarnings)
-- [Template helper](https://github.com/percolatestudio/publish-counts#template-helper)
+- [Template helpers](https://github.com/percolatestudio/publish-counts#template-helpers)
 - [Notes]()
   - [Observer handle leak testing](https://github.com/percolatestudio/publish-counts#observer-handle-leak-testing)
   - [Why doesn't this library count directly in Mongo?](https://github.com/percolatestudio/publish-counts#why-doesnt-this-library-count-directly-in-mongo)
