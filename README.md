@@ -200,13 +200,20 @@ warnings.  Use this option to disable warnings for a particular invocation of
 This fine-grained method of warning suppression is recommended for development
 teams that rely on warnings with respect to future changes.
 
-## Template helper
+## Template helpers
 
-To easily show the counter value within your templates, you can use the `getPublishedCount` template helper.
+To easily show counter values within your templates, use the `getPublishedCount` or `hasPublishedCount` template helper.
 
 Example:
 ```html
-<p>There are {{getPublishedCount 'posts'}} posts</p>
+<p>There are {{getPublishedCount 'posts'}} posts.</p>
+<p>
+  {{#if hasPublishedCount 'posts'}}
+    There are {{getPublishedCount 'posts'}} posts.
+  {{else}}
+    The number of posts is loading...
+  {{/if}}
+</p>
 ```
 
 ## Notes
