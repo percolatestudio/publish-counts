@@ -222,7 +222,8 @@ Example:
 
 The package includes a test that checks the number of observer handles opened and closed (to check for memory leaks). You need to run the `enable-publication-tests-0.7.0.1` branch of `percolatestudio/meteor` to run it however.
 
-### Why doesn't this library count directly in Mongo?
+### Why doesn't this library count directly in Mongo? or...
+**Why does my MongoDB connection time-out with large (1000+) datasets?**
 
 This package is designed primarily for correctness, not performance. That's why
 it's aimed at counting smaller datasets and keeping the count instantly up to
@@ -233,15 +234,19 @@ to know immediately if a relevant change has occurred. This approach does not
 necessarily scale to larger datasets, as the observer needs to cache the entire
 matching dataset (amongst other reasons).
 
+Counting large datasets in this manner is suspected to cause database
+connections to time out (see
+[#86](https://github.com/percolatestudio/publish-counts/issues/86)).
+
 An alternative approach would be to take a .count() of the relevant cursor (or
 perform an aggregation in more complex use cases), and poll it regularly to
-keep up to date. Bulletproof Meteor has a [proof-of-concept][proof-of-concept] of this
-approach.
+keep up to date. Bulletproof Meteor has a [proof of concept][proof-of-concept]
+of this approach.
 
 [proof-of-concept]: https://github.com/bulletproof-meteor/bullet-counter/blob/solution/lib/server.js
 
-We'd love to see someone publish a package that just that for this use case! If
-you do end up making such a package, let us know and we'll link it here.
+We'd love to see someone publish a package for this use case! If you do end up
+making such a package, let us know and we'll link it here.
 
 ## License
 
