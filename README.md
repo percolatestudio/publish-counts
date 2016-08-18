@@ -245,8 +245,7 @@ of this approach.
 
 [proof-of-concept]: https://github.com/bulletproof-meteor/bullet-counter/blob/solution/lib/server.js
 
-We'd love to see someone publish a package for this use case! If you do end up
-making such a package, let us know and we'll link it here.
+This approach is available from the [publish-performant-counts](https://atmospherejs.com/natestrauser/publish-performant-counts) package.
 
 ## License
 
