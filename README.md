@@ -240,13 +240,19 @@ connections to time out (see
 
 An alternative approach would be to take a .count() of the relevant cursor (or
 perform an aggregation in more complex use cases), and poll it regularly to
-keep up to date. Bulletproof Meteor has a [proof of concept][proof-of-concept]
-of this approach.
+update the count. Bulletproof Meteor provides a proof of concept of this
+approach in their [bullet-counter][proof-of-concept] example.
 
 [proof-of-concept]: https://github.com/bulletproof-meteor/bullet-counter/blob/solution/lib/server.js
 
 We'd love to see someone publish a package for this use case! If you do end up
 making such a package, let us know and we'll link it here.
+
+#### Scalable Count Packages
+
+* [publish-performant-counts](https://atmospherejs.com/natestrauser/publish-performant-counts) -
+  Performant solution derived directly from
+  [bullet-counter](https://github.com/bulletproof-meteor/bullet-counter/tree/solution).
 
 ## License
 
