@@ -24,7 +24,8 @@ you will maximize your server's CPU usage as each client connects.
 - [Template helpers](https://github.com/percolatestudio/publish-counts#template-helpers)
 - [Notes]()
   - [Observer handle leak testing](https://github.com/percolatestudio/publish-counts#observer-handle-leak-testing)
-  - [Why doesn't this library count directly in Mongo?](https://github.com/percolatestudio/publish-counts#why-doesnt-this-library-count-directly-in-mongo)
+  - [Why doesn't this library count directly in Mongo? or...](https://github.com/percolatestudio/publish-counts#why-doesnt-this-library-count-directly-in-mongo-or)
+  - [Scalable count packages](https://github.com/percolatestudio/publish-counts#scalable-count-packages)
 - [License](https://github.com/percolatestudio/publish-counts#license)
 
 ## Installation
