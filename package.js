@@ -19,6 +19,7 @@ Package.on_use(function (api, where) {
 Package.on_test(function (api) {
   api.use([
     'tmeasday:publish-counts',
+    'underscore',
     'tinytest',
     'mongo',
     'facts']);
