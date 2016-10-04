@@ -9,6 +9,7 @@ Package.on_use(function (api, where) {
   api.versionsFrom("METEOR@0.9.2");
   api.use(['blaze', 'templating'], 'client', { weak: true });
   api.use('mongo', 'client');
+  api.use('underscore', 'server');
   api.add_files('client/publish-counts.js', 'client');
   api.add_files('server/publish-counts.js', 'server');
   api.export('Counts');
@@ -18,6 +19,7 @@ Package.on_use(function (api, where) {
 Package.on_test(function (api) {
   api.use([
     'tmeasday:publish-counts',
+    'underscore',
     'tinytest',
     'mongo',
     'facts']);
