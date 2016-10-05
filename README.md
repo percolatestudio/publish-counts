@@ -26,6 +26,7 @@ you will maximize your server's CPU usage as each client connects.
   - [Observer handle leak testing](https://github.com/percolatestudio/publish-counts#observer-handle-leak-testing)
   - [Why doesn't this library count directly in Mongo? or...](https://github.com/percolatestudio/publish-counts#why-doesnt-this-library-count-directly-in-mongo-or)
   - [Scalable count packages](https://github.com/percolatestudio/publish-counts#scalable-count-packages)
+  - [Compatiblity with Meteor < v1.3](https://github.com/percolatestudio/publish-counts#compatibility-with-meteor--13)
 - [License](https://github.com/percolatestudio/publish-counts#license)
 
 ## Installation
@@ -254,6 +255,13 @@ making such a package, let us know and we'll link it here.
 * [publish-performant-counts](https://atmospherejs.com/natestrauser/publish-performant-counts) -
   Performant solution derived directly from
   [bullet-counter](https://github.com/bulletproof-meteor/bullet-counter/tree/solution).
+
+#### Compatibility with Meteor < 1.3
+
+Publish-counts 0.8.0 introduces an explicit dependency on the underscore js
+library which may be incompatible with versions of Meteor below 1.3.  Please
+upgrade Meteor to the latest version or, if you cannot, continue to use
+publish-counts 0.7.3.
 
 ## License
 
