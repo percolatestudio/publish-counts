@@ -27,6 +27,7 @@ you will maximize your server's CPU usage as each client connects.
   - [Why doesn't this library count directly in Mongo? or...](https://github.com/percolatestudio/publish-counts#why-doesnt-this-library-count-directly-in-mongo-or)
   - [Scalable count packages](https://github.com/percolatestudio/publish-counts#scalable-count-packages)
   - [Compatiblity with Meteor < v1.3](https://github.com/percolatestudio/publish-counts#compatibility-with-meteor--13)
+- [Frequently Asked Questions](https://github.com/percolatestudio/publish-counts#frequently-asked-questions) \[[Issues](https://github.com/percolatestudio/publish-counts/issues?q=label%3Afaq)]
 - [License](https://github.com/percolatestudio/publish-counts#license)
 
 ## Installation
@@ -262,6 +263,12 @@ Publish-counts 0.8.0 introduces an explicit dependency on the underscore js
 library which may be incompatible with versions of Meteor below 1.3.  Please
 upgrade Meteor to the latest version or, if you cannot, continue to use
 publish-counts 0.7.3.
+
+## Frequently Asked Questions
+
+More information can be found in the [FAQ
+Section](https://github.com/percolatestudio/publish-counts/issues?q=label%3Afaq)
+of the issue tracker.
 
 ## License
 
