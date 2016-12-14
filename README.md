@@ -253,9 +253,8 @@ making such a package, let us know and we'll link it here.
 
 #### Scalable Count Packages
 
-* [publish-performant-counts](https://atmospherejs.com/natestrauser/publish-performant-counts) -
-  Performant solution derived directly from
-  [bullet-counter](https://github.com/bulletproof-meteor/bullet-counter/tree/solution).
+* [publish-performant-counts](https://atmospherejs.com/natestrauser/publish-performant-counts) - Performant solution derived directly from [bullet-counter](https://github.com/bulletproof-meteor/bullet-counter/tree/solution).
+* [meteor-publish-join](https://www.npmjs.com/package/meteor-publish-join) - Publish expensive-aggregated values
 
 #### Compatibility with Meteor < 1.3
 
