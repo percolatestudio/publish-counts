@@ -190,3 +190,14 @@ Counts._warn = function warn (noWarn) {
   var args = Array.prototype.slice.call(arguments, 1);
   console.warn.apply(console, args);
 }
+
+var countsCollection = new Mongo.Collection('counts');
+
+Counts.get = function countsGet(name) {
+  const count = countsCollection.findOne(name);
+  return count && count.count || 0;
+};
+
+Counts.has = function countsHas(name) {
+  return !!countsCollection.findOne(name);
+};
