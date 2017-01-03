@@ -8,10 +8,11 @@ Package.describe({
 Package.on_use(function (api, where) {
   api.versionsFrom("METEOR@0.9.2");
   api.use(['blaze', 'templating'], 'client', { weak: true });
-  api.use('mongo', 'client');
+  api.use('mongo');
   api.use('underscore', 'server');
   api.add_files('client/publish-counts.js', 'client');
   api.add_files('server/publish-counts.js', 'server');
+  api.add_files('lib/publish-counts.js');
   api.export('Counts');
   api.export('publishCount', 'server');
 });
