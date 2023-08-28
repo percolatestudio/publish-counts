@@ -40,7 +40,7 @@ Counts.publish = function(self, name, cursor, options) {
 
   if (cursor && cursor._cursorDescription) {
     cursor._cursorDescription.options.fields =
-      Counts._optimizeQueryFields(cursor._cursorDescription.options.fields, extraField, options.noWarnings);
+      Counts._optimizeQueryFields(cursor._cursorDescription.options.fields || cursor._cursorDescription.options.projection, extraField, options.noWarnings);
   }
 
   var count = 0;
