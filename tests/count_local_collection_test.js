@@ -4,24 +4,24 @@ if (Meteor.isServer) {
   var remove = H.removeFactory(Locals);
   var update = H.updateFactory(Locals);
 
-  Meteor.publish('count-locals', function (testId) {
-    Counts.publish(this, 'locals' + testId, Locals.find({ testId: testId }));
+  Meteor.publish('count-locals', async function (testId) {
+    await Counts.publish(this, 'locals' + testId, Locals.find({ testId: testId }));
   });
 
   Meteor.methods({
-    setup_count_locals: function (testId) {
-      insert(testId, 0, { name: "i'm a test local" });
-      insert(testId, 1, { name: "i'm a test local" });
-      insert(testId, 2, { name: "i'm a test local" });
+    setup_count_locals: async function (testId) {
+      await insert(testId, 0, { name: "i'm a test local" });
+      await insert(testId, 1, { name: "i'm a test local" });
+      await insert(testId, 2, { name: "i'm a test local" });
     },
-    addDoc_count_locals: function (testId) {
-      insert(testId, 3, { name: "i'm a test local" });
+    addDoc_count_locals: async function (testId) {
+      await insert(testId, 3, { name: "i'm a test local" });
     },
-    updateDoc_count_locals: function (testId) {
-      update(testId, 0, { $set: { name: "i'm an edited local" } });
+    updateDoc_count_locals: async function (testId) {
+      await update(testId, 0, { $set: { name: "i'm an edited local" } });
     },
-    removeDoc_count_locals: function (testId) {
-      remove(testId, 0);
+    removeDoc_count_locals: async function (testId) {
+      await remove(testId, 0);
     },
   });
 }

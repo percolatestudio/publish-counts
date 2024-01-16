@@ -4,8 +4,12 @@ A package to help you publish the count of a cursor, in real time.
 
 Publish-counts is designed for counting a small number of documents around an
 order of 100.  Due to the real-time capability, this package should not be used
-to count all documents in large datasets.  Maybe some, but not all.  Otherwise
+to count all documents in large datasets.  Maybe some, but not all. Otherwise,
 you will maximize your server's CPU usage as each client connects.
+
+## v1.x Breaking changes
+
+This version is only compatible with [Meteor 3.0](https://github.com/meteor/meteor/blob/release-3.0/docs/generators/changelog/versions/3.0.md) and higher.
 
 ## Table of Contents
 

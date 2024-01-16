@@ -1,3 +1,4 @@
+/* eslint-disable */
 this.Posts = new Mongo.Collection('posts');
 
 // {this} is provided by IIFE that wraps this file
@@ -55,6 +56,12 @@ if (Meteor.isServer) {
     },
     remove: function() {
       return true;
+    },
+    insertAsync: function() {
+      return true;
+    },
+    removeAsync: function() {
+      return true;
     }
   });
 
@@ -74,14 +81,14 @@ if (Meteor.isServer) {
         _id:    H.docId(testId, docNum),
         testId: testId,
       });
-      collection.insert(testDoc);
+      return collection.insertAsync(testDoc);
     };
   }
 
   this.H.removeFactory = function removeFactory (collection) {
     // return a DRY function that removes docs from one collection.
     return function remove (testId, docNum) {
-      collection.remove({_id: H.docId(testId, docNum)});
+      return collection.removeAsync({_id: H.docId(testId, docNum)});
     };
   }
 
@@ -97,7 +104,7 @@ if (Meteor.isServer) {
         modifier.testId = testId;
       }
 
-      collection.update(H.docId(testId, docNum), modifier);
+      return collection.updateAsync(H.docId(testId, docNum), modifier);
     };
   }
 

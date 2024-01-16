@@ -1,7 +1,7 @@
 var noWarnings = false;
 
 Counts = {};
-Counts.publish = function(self, name, cursor, options) {
+Counts.publish = async function(self, name, cursor, options) {
   var initializing = true;
   var handle;
   options = options || {};
@@ -76,13 +76,13 @@ Counts.publish = function(self, name, cursor, options) {
   }
 
   if (!countFn) {
-    self.added('counts', name, {count: cursor.count()});
+    self.added('counts', name, {count: await cursor.countAsync()});
     if (!options.noReady)
       self.ready();
   }
 
   if (!options.nonReactive)
-    handle = cursor.observe(observers);
+    handle = await cursor.observe(observers);
 
   if (countFn)
     self.added('counts', name, {count: count});

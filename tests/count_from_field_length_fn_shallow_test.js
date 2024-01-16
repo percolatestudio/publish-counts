@@ -1,29 +1,29 @@
 if (Meteor.isServer) {
-  Meteor.publish('count_from_field_length_fn_shallow', function (testId) {
-    Counts.publish(this, 'posts' + testId, Posts.find({testId: testId}),
+  Meteor.publish('count_from_field_length_fn_shallow', async function (testId) {
+    await Counts.publish(this, 'posts' + testId, Posts.find({testId: testId}),
         {countFromFieldLength: function (doc) { return doc.array; }});
   });
 
   Meteor.methods({
-    setup_shallow_countFromFieldLength_fn: function (testId) {
-      H.insert(testId, 0, {array: [1, 2, 3]});
-      H.insert(testId, 1, {array: [1, 2, 3, 4]});
+    setup_shallow_countFromFieldLength_fn: async function (testId) {
+      await H.insert(testId, 0, {array: [1, 2, 3]});
+      await H.insert(testId, 1, {array: [1, 2, 3, 4]});
     },
-    addDoc_shallow_countFromFieldLength_fn: function (testId) {
-      H.insert(testId, 2, {array: [1, 2]});
+    addDoc_shallow_countFromFieldLength_fn: async function (testId) {
+      await H.insert(testId, 2, {array: [1, 2]});
     },
-    updateDoc_shallow_countFromFieldLength_fn: function (testId) {
+    updateDoc_shallow_countFromFieldLength_fn: async function (testId) {
       // add 2 elements to array of doc 0
-      H.update(testId, 0, {$set: {array: [1, 2, 3, 4, 5]}});
+      await H.update(testId, 0, {$set: {array: [1, 2, 3, 4, 5]}});
     },
-    removeDoc_shallow_countFromFieldLength_fn: function (testId) {
-      H.remove(testId, 0);
+    removeDoc_shallow_countFromFieldLength_fn: async function (testId) {
+      await H.remove(testId, 0);
     },
-    addField_shallow_countFromFieldLength_fn: function (testId) {
-      H.update(testId, 0, {array: [1, 2, 3, 4, 5]});
+    addField_shallow_countFromFieldLength_fn: async function (testId) {
+      await H.update(testId, 0, {array: [1, 2, 3, 4, 5]});
     },
-    removeField_shallow_countFromFieldLength_fn: function (testId) {
-      H.update(testId, 0, {});
+    removeField_shallow_countFromFieldLength_fn: async function (testId) {
+      await H.update(testId, 0, {});
     },
   });
 }

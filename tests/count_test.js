@@ -1,23 +1,22 @@
 if (Meteor.isServer) {
-
-  Meteor.publish('count', function (testId) {
-    Counts.publish(this, 'posts' + testId, Posts.find({ testId: testId }));
+  Meteor.publish('count', async function (testId) {
+    await Counts.publish(this, 'posts' + testId, Posts.find({ testId: testId }));
   });
 
   Meteor.methods({
-    setup_count: function (testId) {
-      H.insert(testId, 0, { name: "i'm a test post" });
-      H.insert(testId, 1, { name: "i'm a test post" });
-      H.insert(testId, 2, { name: "i'm a test post" });
+    setup_count: async function (testId) {
+      await H.insert(testId, 0, { name: "i'm a test post" });
+      await H.insert(testId, 1, { name: "i'm a test post" });
+      await H.insert(testId, 2, { name: "i'm a test post" });
     },
-    addDoc_count: function (testId) {
-      H.insert(testId, 3, { name: "i'm a test post" });
+    addDoc_count: async function (testId) {
+      await H.insert(testId, 3, { name: "i'm a test post" });
     },
-    updateDoc_count: function (testId) {
-      H.update(testId, 0, { $set: { name: "i'm an edited post" } });
+    updateDoc_count: async function (testId) {
+      await H.update(testId, 0, { $set: { name: "i'm an edited post" } });
     },
-    removeDoc_count: function (testId) {
-      H.remove(testId, 0);
+    removeDoc_count: async function (testId) {
+      await H.remove(testId, 0);
     },
   });
 }

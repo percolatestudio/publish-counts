@@ -1,28 +1,28 @@
 if (Meteor.isServer) {
-  Meteor.publish('count_from_field_fn_deep', function (testId) {
-    Counts.publish(this, 'posts' + testId, Posts.find({testId: testId}),
+  Meteor.publish('count_from_field_fn_deep', async function (testId) {
+    await Counts.publish(this, 'posts' + testId, Posts.find({testId: testId}),
         {countFromField: function (doc) { return doc.a.b; }});
   });
 
   Meteor.methods({
-    setup_deep_countFromField_fn: function (testId) {
-      H.insert(testId, 0, {a: {b: 2}});
-      H.insert(testId, 1, {a: {b: 3}});
+    setup_deep_countFromField_fn: async function (testId) {
+      await H.insert(testId, 0, {a: {b: 2}});
+      await H.insert(testId, 1, {a: {b: 3}});
     },
-    addDoc_deep_countFromField_fn: function (testId) {
-      H.insert(testId, 2, {a: {b: 4}});
+    addDoc_deep_countFromField_fn: async function (testId) {
+      await H.insert(testId, 2, {a: {b: 4}});
     },
-    updateDoc_deep_countFromField_fn: function (testId) {
-      H.update(testId, 0, {$set: {a: {b: 1}}});
+    updateDoc_deep_countFromField_fn: async function (testId) {
+      await H.update(testId, 0, {$set: {a: {b: 1}}});
     },
-    removeDoc_deep_countFromField_fn: function (testId) {
-      H.remove(testId, 0);
+    removeDoc_deep_countFromField_fn: async function (testId) {
+      await H.remove(testId, 0);
     },
-    addField_deep_countFromField_fn: function (testId) {
-      H.update(testId, 0, {a: {b: 4}});
+    addField_deep_countFromField_fn: async function (testId) {
+      await H.update(testId, 0, {a: {b: 4}});
     },
-    removeField_deep_countFromField_fn: function (testId) {
-      H.update(testId, 0, {});
+    removeField_deep_countFromField_fn: async function (testId) {
+      await H.update(testId, 0, {});
     },
   });
 }
