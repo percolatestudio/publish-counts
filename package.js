@@ -1,13 +1,13 @@
 Package.describe({
   name: "tmeasday:publish-counts",
   summary: "Publish the count of a cursor, in real time",
-  version: "1.0.0",
+  version: "1.0.0-beta.0",
   git: "https://github.com/percolatestudio/publish-counts.git"
 });
 
 Package.onUse(function (api, where) {
   api.versionsFrom('3.0-beta.0');
-  api.use(['blaze', 'templating'], 'client', { weak: true });
+  api.use(['blaze@3.0.0-alpha300.17', 'templating@1.4.4-alpha300.17'], 'client', { weak: true });
   api.use('mongo', 'client');
   api.use('underscore', 'server');
   api.addFiles('client/publish-counts.js', 'client');
