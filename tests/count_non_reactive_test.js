@@ -1,20 +1,19 @@
 if (Meteor.isServer) {
-
-  Meteor.publish('count_non_reactive', function (testId) {
-    Counts.publish(this, 'posts' + testId, Posts.find({ testId: testId }), {nonReactive: true});
+  Meteor.publish('count_non_reactive', async function (testId) {
+    await Counts.publish(this, 'posts' + testId, Posts.find({ testId: testId }), {nonReactive: true});
   });
 
   Meteor.methods({
-    setup_countNonReactive: function (testId) {
-      H.insert(testId, 0, {name: "i'm a test post" });
-      H.insert(testId, 1, {name: "i'm a test post" });
-      H.insert(testId, 2, {name: "i'm a test post" });
+    setup_countNonReactive: async function (testId) {
+      await H.insert(testId, 0, {name: "i'm a test post" });
+      await H.insert(testId, 1, {name: "i'm a test post" });
+      await H.insert(testId, 2, {name: "i'm a test post" });
     },
-    add_doc_countNonReactive: function (testId) {
-      H.insert(testId, 3, {name: "i'm a test post" });
+    add_doc_countNonReactive: async function (testId) {
+      await H.insert(testId, 3, {name: "i'm a test post" });
     },
-    remove_doc_countNonReactive: function (testId) {
-      H.remove(testId, 0);
+    remove_doc_countNonReactive: async function (testId) {
+      await H.remove(testId, 0);
     },
   });
 }

@@ -1,6 +1,6 @@
 if (Meteor.isServer) {
-  Meteor.publish('Counts.has', function (testId) {
-    Counts.publish(this, 'posts' + testId, Posts.find({ testId: testId }));
+  Meteor.publish('Counts.has', async function (testId) {
+    await Counts.publish(this, 'posts' + testId, Posts.find({ testId: testId }));
   });
 }
 

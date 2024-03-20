@@ -1,30 +1,37 @@
 Package.describe({
   name: "tmeasday:publish-counts",
   summary: "Publish the count of a cursor, in real time",
-  version: "0.8.1",
+  version: "1.0.0-beta.0",
   git: "https://github.com/percolatestudio/publish-counts.git"
 });
 
-Package.on_use(function (api, where) {
-  api.versionsFrom("METEOR@0.9.2");
-  api.use(['blaze', 'templating'], 'client', { weak: true });
+Package.onUse(function (api, where) {
+  api.versionsFrom('3.0-beta.0');
+  api.use(['blaze@3.0.0-alpha300.17', 'templating@1.4.4-alpha300.17'], 'client', { weak: true });
   api.use('mongo', 'client');
   api.use('underscore', 'server');
-  api.add_files('client/publish-counts.js', 'client');
-  api.add_files('server/publish-counts.js', 'server');
+  api.addFiles('client/publish-counts.js', 'client');
+  api.addFiles('server/publish-counts.js', 'server');
   api.export('Counts');
   api.export('publishCount', 'server');
 });
 
-Package.on_test(function (api) {
+// meteor test-packages tmeasday:publish-counts --driver-package test-in-console
+Package.onTest(function (api) {
   api.use([
     'tmeasday:publish-counts',
     'underscore',
     'tinytest',
     'mongo',
-    'facts']);
+    'facts-base'
+  ]);
 
-  api.add_files([
+  api.use([
+    'jquery',
+    'blaze-html-templates'
+  ], 'client');
+
+  api.addFiles([
     'tests/helper.js',
     'tests/has_count_test.js',
     'tests/count_test.js',

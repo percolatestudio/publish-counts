@@ -1,7 +1,7 @@
 var noWarnings = false;
 
 Counts = {};
-Counts.publish = function(self, name, cursor, options) {
+Counts.publish = async function(self, name, cursor, options) {
   var initializing = true;
   var handle;
   options = options || {};
@@ -76,13 +76,32 @@ Counts.publish = function(self, name, cursor, options) {
   }
 
   if (!countFn) {
-    self.added('counts', name, {count: cursor.count()});
+    let count;
+    // Cursor.count is officially deprecated, so reuse Meteor's stored cursor options, like
+    // https://github.com/meteor/meteor/blob/release-3.0/packages/mongo/mongo_driver.js#L876,
+    // but we reuse the method countDocuments available here
+    // https://github.com/meteor/meteor/blob/release-3.0/packages/mongo/mongo_driver.js#L772
+    // given that it applies the internal methods replaceTypes and replaceMeteorAtomWithMongo
+    // to the `selector` and `options` arguments
+    if (cursor._cursorDescription && typeof cursor._mongo?.countDocuments === 'function') {
+      const { collectionName, selector, options } = cursor._cursorDescription;
+      count = await cursor._mongo.countDocuments(collectionName, selector, options);
+    } else {
+      const isLocalCollection = cursor.collection && !cursor.collection.name;
+      if (!isLocalCollection) {
+        Counts._warn(null, 'publish-counts: Internal Meteor API not available, ' +
+            'loading cursor documents in the memory to perform the count');
+      }
+      const array = await cursor.fetchAsync();
+      count = array.length;
+    }
+    self.added('counts', name, {count: count});
     if (!options.noReady)
       self.ready();
   }
 
   if (!options.nonReactive)
-    handle = cursor.observe(observers);
+    handle = await cursor.observe(observers);
 
   if (countFn)
     self.added('counts', name, {count: count});

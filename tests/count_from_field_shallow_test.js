@@ -1,21 +1,21 @@
 if (Meteor.isServer) {
-  Meteor.publish('count_from_field_shallow', function (testId) {
-    Counts.publish(this, 'posts' + testId, Posts.find({testId: testId}), {countFromField: 'number'});
+  Meteor.publish('count_from_field_shallow', async function (testId) {
+    await Counts.publish(this, 'posts' + testId, Posts.find({testId: testId}), {countFromField: 'number'});
   });
 
   Meteor.methods({
-    setup_shallow_countFromField: function (testId) {
-      H.insert(testId, 0, {number: 2});
-      H.insert(testId, 1, {number: 3});
+    setup_shallow_countFromField: async function (testId) {
+      await H.insert(testId, 0, {number: 2});
+      await H.insert(testId, 1, {number: 3});
     },
-    addDoc_shallow_countFromField: function (testId) {
-      H.insert(testId, 2, {number: 4});
+    addDoc_shallow_countFromField: async function (testId) {
+      await H.insert(testId, 2, {number: 4});
     },
-    updateDoc_shallow_countFromField: function (testId) {
-      H.update(testId, 0, {$set: {number: 1}});
+    updateDoc_shallow_countFromField: async function (testId) {
+      await H.update(testId, 0, {$set: {number: 1}});
     },
-    removeDoc_shallow_countFromField: function (testId) {
-      H.remove(testId, 0);
+    removeDoc_shallow_countFromField: async function (testId) {
+      await H.remove(testId, 0);
     },
   });
 }
